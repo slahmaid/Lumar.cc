@@ -1,13 +1,15 @@
 gsap.registerPlugin(ScrollTrigger, ScrollSmoother, SplitText);
 
+gsap.config({ force3D: true });
+ScrollTrigger.config({ ignoreMobileResize: true });
+
 const hamburger = document.getElementById("hamburger-12");
 const siteMenu = document.getElementById("site-menu");
-const menuLinks = siteMenu
-  ? gsap.utils.toArray(".site-menu-link")
-  : [];
+const menuLinks = siteMenu ? gsap.utils.toArray(".site-menu-link") : [];
 
 let menuOpen = false;
 let menuTween = null;
+let smoother = null;
 
 function setMenuOpen(isOpen) {
   if (!hamburger || !siteMenu || menuOpen === isOpen) return;
@@ -17,6 +19,10 @@ function setMenuOpen(isOpen) {
   hamburger.setAttribute("aria-expanded", String(isOpen));
   siteMenu.setAttribute("aria-hidden", String(!isOpen));
   document.body.classList.toggle("menu-open", isOpen);
+
+  if (smoother) {
+    smoother.paused(isOpen);
+  }
 
   if (menuTween) menuTween.kill();
 
@@ -75,11 +81,12 @@ if (hamburger && siteMenu) {
   });
 }
 
-ScrollSmoother.create({
-  smooth: 2,
-  speed: 2,
+smoother = ScrollSmoother.create({
+  wrapper: "#smooth-wrapper",
+  content: "#smooth-content",
+  smooth: 1.25,
   effects: true,
-  smoothTouch: 0.1,
+  smoothTouch: 0.15,
 });
 
 const siteHeader = document.querySelector(".site-header");
@@ -89,12 +96,13 @@ ScrollTrigger.create({
   start: "bottom top",
   onEnter: () => {
     siteHeader.style.pointerEvents = "auto";
-    gsap.to(siteHeader, { autoAlpha: 1, duration: 0.35 });
+    gsap.to(siteHeader, { autoAlpha: 1, duration: 0.4, ease: "power2.out" });
   },
   onLeaveBack: () => {
     gsap.to(siteHeader, {
       autoAlpha: 0,
-      duration: 0.25,
+      duration: 0.3,
+      ease: "power2.out",
       onComplete: () => {
         siteHeader.style.pointerEvents = "none";
       },
@@ -122,37 +130,34 @@ const distPaths = gsap.utils.distribute({
   amount: 600,
 });
 
-const logoTl = gsap.timeline({
-  scrollTrigger: {
-    trigger: ".logo-section",
-    scrub: 1,
-    start: "bottom 95%",
-    end: "bottom center",
-  },
-});
+gsap
+  .timeline({
+    scrollTrigger: {
+      trigger: ".logo-section",
+      scrub: 1.2,
+      start: "bottom 95%",
+      end: "bottom center",
+    },
+  })
+  .to(heroWords, { x: distPaths, ease: "none" })
+  .to(heroWords, { opacity: 0, ease: "none" }, 0);
 
-logoTl
-  .to(heroWords, { x: distPaths })
-  .to(heroWords, { opacity: 0 }, 0);
-
-const gridTl = gsap.timeline({
-  scrollTrigger: {
-    trigger: ".grid-section",
-    scrub: 1,
-    start: "top center",
-    end: "bottom+=10% bottom",
-  },
-  defaults: {
-    ease: "power1.inOut",
-  },
-});
-
-gridTl
+gsap
+  .timeline({
+    scrollTrigger: {
+      trigger: ".grid-section",
+      scrub: 1.2,
+      start: "top center",
+      end: "bottom+=10% bottom",
+    },
+    defaults: {
+      ease: "none",
+    },
+  })
   .add("start")
   .from(
     ".grid-layout",
     {
-      ease: "power1",
       scale: 3,
     },
     "start"
@@ -160,7 +165,6 @@ gridTl
   .from(
     ".column-1 .grid-image",
     {
-      duration: 0.6,
       xPercent: (i) => -((i + 1) * 40 + i * 100),
       yPercent: (i) => (i + 1) * 40 + i * 100,
     },
@@ -169,7 +173,6 @@ gridTl
   .from(
     ".column-3 .grid-image",
     {
-      duration: 0.6,
       xPercent: (i) => (i + 1) * 40 + i * 100,
       yPercent: (i) => (i + 1) * 40 + i * 100,
     },
@@ -178,9 +181,10 @@ gridTl
 
 gsap.from(".parallax-section", {
   scale: 1 / 3,
+  ease: "none",
   scrollTrigger: {
     trigger: ".parallax-section",
-    scrub: 1,
+    scrub: 1.2,
   },
 });
 
@@ -192,10 +196,11 @@ const pinTl = gsap.timeline({
   scrollTrigger: {
     pin: true,
     trigger: pinSection,
-    scrub: true,
+    scrub: 1.2,
     start: "top top",
     end: () => "+=" + pinContent1.offsetWidth,
     invalidateOnRefresh: true,
+    anticipatePin: 1,
   },
 });
 
@@ -258,16 +263,23 @@ function setupAfterTitle() {
     afterBodySplit = null;
   }
 
-  afterSplit = SplitText.create(".after-title", { type: "lines" });
-  afterBodySplit = SplitText.create(".after-body-text", { type: "words" });
+  afterSplit = SplitText.create(".after-title", {
+    type: "lines",
+    linesClass: "after-line",
+  });
+  afterBodySplit = SplitText.create(".after-body-text", {
+    type: "words",
+    wordsClass: "after-word",
+  });
+
+  gsap.set(afterSplit.lines, { transformOrigin: "50% 50% -160px" });
 
   afterLinesAnimation = gsap.from(afterSplit.lines, {
-    rotationX: -100,
-    transformOrigin: "50% 50% -160px",
+    rotationX: -80,
     opacity: 0,
-    duration: 0.8,
-    ease: "power3",
-    stagger: 0.25,
+    duration: 0.9,
+    ease: "power3.out",
+    stagger: 0.18,
     scrollTrigger: {
       trigger: ".scroll-smoother-section",
       start: "bottom bottom",
@@ -276,12 +288,11 @@ function setupAfterTitle() {
   });
 
   afterWordsAnimation = gsap.from(afterBodySplit.words, {
-    y: -100,
+    y: 40,
     opacity: 0,
-    rotation: "random(-80, 80)",
-    duration: 0.45,
-    ease: "back",
-    stagger: 0.03,
+    duration: 0.5,
+    ease: "power2.out",
+    stagger: 0.02,
     scrollTrigger: {
       trigger: ".after-body",
       start: "top 85%",
@@ -291,9 +302,9 @@ function setupAfterTitle() {
 
   afterImageReveal = gsap.from(".after-image-wrap", {
     clipPath: "inset(100% 0 0 0)",
-    duration: 1.1,
+    duration: 1.2,
     ease: "power3.out",
-    stagger: 0.2,
+    stagger: 0.18,
     scrollTrigger: {
       trigger: ".after-body",
       start: "top 70%",
@@ -302,10 +313,10 @@ function setupAfterTitle() {
   });
 
   afterImageScale = gsap.from(".after-image", {
-    scale: 1.15,
-    duration: 1.1,
+    scale: 1.12,
+    duration: 1.2,
     ease: "power3.out",
-    stagger: 0.2,
+    stagger: 0.18,
     scrollTrigger: {
       trigger: ".after-body",
       start: "top 70%",
@@ -314,17 +325,19 @@ function setupAfterTitle() {
   });
 
   afterFactsReveal = gsap.from(".after-fact", {
-    y: 40,
+    y: 28,
     opacity: 0,
-    duration: 0.7,
+    duration: 0.8,
     ease: "power3.out",
-    stagger: 0.1,
+    stagger: 0.12,
     scrollTrigger: {
       trigger: ".after-facts",
       start: "top 85%",
       toggleActions: "play none none reverse",
     },
   });
+
+  ScrollTrigger.refresh();
 }
 
 setupAfterTitle();
@@ -332,20 +345,50 @@ setupAfterTitle();
 let afterTitleResizeTimer;
 window.addEventListener("resize", () => {
   clearTimeout(afterTitleResizeTimer);
-  afterTitleResizeTimer = setTimeout(setupAfterTitle, 200);
+  afterTitleResizeTimer = setTimeout(() => {
+    setupAfterTitle();
+  }, 250);
 });
 
 const marqueeTrack = document.querySelector(".text-marquee-track");
-const marqueeBaseVelocity = 1;
-const marqueeDelay = 500;
 
 if (marqueeTrack) {
-  window.setTimeout(() => {
-    gsap.to(marqueeTrack, {
-      xPercent: -50,
-      duration: 20 / marqueeBaseVelocity,
-      ease: "none",
-      repeat: -1,
-    });
-  }, marqueeDelay);
+  gsap.to(marqueeTrack, {
+    xPercent: -50,
+    duration: 28,
+    ease: "none",
+    repeat: -1,
+    force3D: true,
+  });
 }
+
+function refreshAfterImages() {
+  const images = gsap.utils.toArray("img");
+  let pending = images.length;
+
+  if (!pending) {
+    ScrollTrigger.refresh();
+    return;
+  }
+
+  const done = () => {
+    pending -= 1;
+    if (pending <= 0) {
+      ScrollTrigger.refresh();
+    }
+  };
+
+  images.forEach((img) => {
+    if (img.complete) {
+      done();
+    } else {
+      img.addEventListener("load", done, { once: true });
+      img.addEventListener("error", done, { once: true });
+    }
+  });
+}
+
+refreshAfterImages();
+window.addEventListener("load", () => {
+  ScrollTrigger.refresh();
+});
