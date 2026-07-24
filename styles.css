@@ -385,12 +385,9 @@ body.menu-open {
     grid-gap: 0.65rem;
   }
 
-  .hero-word,
-  .after-line,
-  .after-word,
-  .after-image,
-  .parallax-image {
-    will-change: auto;
+  .hero-word {
+    display: inline-block;
+    will-change: transform, opacity;
   }
 
   .page-after-scroll {

@@ -23,9 +23,11 @@
   const pinContent1 = document.querySelector(".pin-content-1");
   const pinContent2 = document.querySelector(".pin-content-2");
   const marqueeTrack = document.querySelector(".text-marquee-track");
-  const isTouch =
+  // Prefer coarse pointer over maxTouchPoints — Windows laptops often report
+  // touch points even when used with a mouse, which was muting animations.
+  const isCoarsePointer =
     typeof window !== "undefined" &&
-    ("ontouchstart" in window || navigator.maxTouchPoints > 0);
+    window.matchMedia("(pointer: coarse)").matches;
 
   let menuOpen = false;
   let menuTween = null;
@@ -179,9 +181,11 @@
         smoother = ScrollSmoother.create({
           wrapper: "#smooth-wrapper",
           content: "#smooth-content",
-          smooth: isTouch ? 0 : 1.25,
-          effects: !isTouch,
-          smoothTouch: 0,
+          smooth: isCoarsePointer ? 0.8 : 1.25,
+          effects: true,
+          // Keep a light touch smooth so scrubbed hero/grid still feel alive
+          // without fighting native mobile scroll as hard as 0.15–1.0 can.
+          smoothTouch: isCoarsePointer ? 0.1 : 0,
           normalizeScroll: false,
         });
       }
@@ -211,6 +215,7 @@
         });
       }
 
+      // Hero word disperse — same animation as original preview on all viewports
       if (heroTitle) {
         const originalHero =
           heroTitle.dataset.originalText || heroTitle.textContent.trim();
@@ -229,8 +234,8 @@
 
         const heroWords = gsap.utils.toArray(".hero-word");
         const distPaths = gsap.utils.distribute({
-          base: isTouch ? -120 : -300,
-          amount: isTouch ? 240 : 600,
+          base: -300,
+          amount: 600,
         });
 
         gsap
@@ -240,53 +245,58 @@
               scrub: 1.2,
               start: "bottom 95%",
               end: "bottom center",
+              invalidateOnRefresh: true,
             },
           })
           .to(heroWords, { x: distPaths, ease: "none" })
           .to(heroWords, { opacity: 0, ease: "none" }, 0);
       }
 
+      // Grid zoom + column fly-in (all breakpoints)
+      gsap
+        .timeline({
+          scrollTrigger: {
+            trigger: ".grid-section",
+            scrub: 1.2,
+            start: "top center",
+            end: "bottom+=10% bottom",
+            invalidateOnRefresh: true,
+          },
+          defaults: { ease: "none" },
+        })
+        .add("start")
+        .from(".grid-layout", { scale: 3 }, "start")
+        .from(
+          ".column-1 .grid-image",
+          {
+            xPercent: (i) => -((i + 1) * 40 + i * 100),
+            yPercent: (i) => (i + 1) * 40 + i * 100,
+          },
+          "start"
+        )
+        .from(
+          ".column-3 .grid-image",
+          {
+            xPercent: (i) => (i + 1) * 40 + i * 100,
+            yPercent: (i) => (i + 1) * 40 + i * 100,
+          },
+          "start"
+        );
+
+      gsap.from(".parallax-section", {
+        scale: 1 / 3,
+        ease: "none",
+        scrollTrigger: {
+          trigger: ".parallax-section",
+          scrub: 1.2,
+          invalidateOnRefresh: true,
+        },
+      });
+
       const desktop = gsap.matchMedia();
 
+      // Horizontal pin scrub — desktop/tablet widths only (mobile uses stacked CSS)
       desktop.add("(min-width: 768px)", () => {
-        gsap
-          .timeline({
-            scrollTrigger: {
-              trigger: ".grid-section",
-              scrub: 1.2,
-              start: "top center",
-              end: "bottom+=10% bottom",
-            },
-            defaults: { ease: "none" },
-          })
-          .add("start")
-          .from(".grid-layout", { scale: 3 }, "start")
-          .from(
-            ".column-1 .grid-image",
-            {
-              xPercent: (i) => -((i + 1) * 40 + i * 100),
-              yPercent: (i) => (i + 1) * 40 + i * 100,
-            },
-            "start"
-          )
-          .from(
-            ".column-3 .grid-image",
-            {
-              xPercent: (i) => (i + 1) * 40 + i * 100,
-              yPercent: (i) => (i + 1) * 40 + i * 100,
-            },
-            "start"
-          );
-
-        gsap.from(".parallax-section", {
-          scale: 1 / 3,
-          ease: "none",
-          scrollTrigger: {
-            trigger: ".parallax-section",
-            scrub: 1.2,
-          },
-        });
-
         if (pinSection && pinContent1 && pinContent2) {
           const pinTl = gsap.timeline({
             scrollTrigger: {
@@ -319,40 +329,19 @@
         }
 
         return () => {
-          ensureVisible([
-            ".grid-layout",
-            ".column-1 .grid-image",
-            ".column-3 .grid-image",
-            ".parallax-section",
-            ".pin-content-1",
-            ".pin-content-2",
-          ]);
+          ensureVisible([".pin-content-1", ".pin-content-2"]);
         };
       });
 
       desktop.add("(max-width: 767px)", () => {
-        gsap.fromTo(
-          ".grid-layout",
-          { scale: 1.15 },
-          {
-            scale: 1,
-            ease: "none",
-            scrollTrigger: {
-              trigger: ".grid-section",
-              scrub: true,
-              start: "top 80%",
-              end: "bottom bottom",
-            },
-          }
-        );
-
         if (pinContent1 && pinContent2) {
-          gsap.set([pinContent1, pinContent2], { x: 0, clearProps: "transform" });
+          gsap.set([pinContent1, pinContent2], {
+            x: 0,
+            clearProps: "transform",
+          });
         }
 
-        return () => {
-          ensureVisible([".grid-layout", ".pin-content-1", ".pin-content-2"]);
-        };
+        return () => {};
       });
 
       let afterSplit = null;
@@ -413,7 +402,7 @@
 
             afterLinesAnimation = gsap.fromTo(
               afterSplit.lines,
-              { rotationX: isTouch ? 0 : -80, opacity: 0 },
+              { rotationX: -80, opacity: 0 },
               {
                 rotationX: 0,
                 opacity: 1,
@@ -431,13 +420,13 @@
 
             afterWordsAnimation = gsap.fromTo(
               afterBodySplit.words,
-              { y: 24, opacity: 0 },
+              { y: 40, opacity: 0 },
               {
                 y: 0,
                 opacity: 1,
                 duration: 0.5,
                 ease: "power2.out",
-                stagger: 0.015,
+                stagger: 0.02,
                 scrollTrigger: {
                   trigger: ".after-body",
                   start: "top 92%",
@@ -450,7 +439,7 @@
 
           afterImageReveal = gsap.fromTo(
             ".after-image-wrap",
-            { clipPath: isTouch ? "inset(0% 0 0 0)" : "inset(100% 0 0 0)" },
+            { clipPath: "inset(100% 0 0 0)" },
             {
               clipPath: "inset(0% 0 0 0)",
               duration: 1.2,
@@ -467,7 +456,7 @@
 
           afterImageScale = gsap.fromTo(
             ".after-image",
-            { scale: isTouch ? 1 : 1.12 },
+            { scale: 1.12 },
             {
               scale: 1,
               duration: 1.2,
