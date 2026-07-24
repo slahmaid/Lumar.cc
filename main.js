@@ -254,6 +254,59 @@
     setTimeout(centerStandard, 400);
   })();
 
+  // Lead form → WhatsApp (replace YOUR_NUMBER with digits only, country code, no +)
+  (function initLeadForm() {
+    const form = document.getElementById("lead-form");
+    if (!form) return;
+
+    const WHATSAPP_NUMBER = "YOUR_NUMBER";
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+
+      const data = new FormData(form);
+      const name = String(data.get("name") || "").trim();
+      const whatsapp = String(data.get("whatsapp") || "").trim();
+      const major = String(data.get("major") || "").trim();
+      const language = String(data.get("language") || "").trim();
+      const gpa = String(data.get("gpa") || "").trim();
+      const budget = String(data.get("budget") || "").trim();
+
+      const message = [
+        "Hello LUMAR — I'd like my university options.",
+        "",
+        `Name: ${name}`,
+        `WhatsApp: ${whatsapp}`,
+        `Desired major: ${major}`,
+        `Study language: ${language}`,
+        `High school GPA: ${gpa}`,
+        `Yearly budget: ${budget}`,
+      ].join("\n");
+
+      if (!WHATSAPP_NUMBER || WHATSAPP_NUMBER === "YOUR_NUMBER") {
+        console.warn(
+          "Set WHATSAPP_NUMBER in main.js (digits only, e.g. 2126xxxxxxx)."
+        );
+        window.alert(
+          "WhatsApp number not configured yet. Replace YOUR_NUMBER in main.js."
+        );
+        return;
+      }
+
+      const url =
+        "https://wa.me/" +
+        WHATSAPP_NUMBER.replace(/\D/g, "") +
+        "?text=" +
+        encodeURIComponent(message);
+      window.open(url, "_blank", "noopener,noreferrer");
+    });
+  })();
+
   function ensureVisible(targets) {
     const els = gsap.utils.toArray(targets);
     if (!els.length) return;

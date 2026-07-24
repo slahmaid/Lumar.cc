@@ -306,6 +306,98 @@
           </div>
         </div>
       </section>
+
+      <section class="contact-section" id="contact" aria-label="Contact">
+        <div class="contact-inner">
+          <p class="contact-label">Contact</p>
+          <h2 class="contact-title">Tell us where you are — we’ll map the options</h2>
+
+          <form class="contact-form" id="lead-form" novalidate>
+            <div class="contact-field">
+              <label class="contact-field__label" for="lead-name">Full name</label>
+              <input
+                class="contact-field__input"
+                id="lead-name"
+                name="name"
+                type="text"
+                autocomplete="name"
+                placeholder="Your full name"
+                required
+              >
+            </div>
+
+            <div class="contact-field">
+              <label class="contact-field__label" for="lead-whatsapp">WhatsApp number</label>
+              <input
+                class="contact-field__input"
+                id="lead-whatsapp"
+                name="whatsapp"
+                type="tel"
+                autocomplete="tel"
+                inputmode="tel"
+                placeholder="+212 6XX XXX XXX"
+                required
+              >
+              <p class="contact-field__hint">Include your country code — ideal for Moroccan applicants.</p>
+            </div>
+
+            <div class="contact-field">
+              <label class="contact-field__label" for="lead-major">Desired major</label>
+              <input
+                class="contact-field__input"
+                id="lead-major"
+                name="major"
+                type="text"
+                placeholder="e.g. Medicine, Engineering, Management"
+                required
+              >
+            </div>
+
+            <fieldset class="contact-field contact-field--language">
+              <legend class="contact-field__label">Preferred study language</legend>
+              <div class="contact-language">
+                <label class="contact-language__option">
+                  <input type="radio" name="language" value="English" required>
+                  <span class="contact-language__card">English</span>
+                </label>
+                <label class="contact-language__option">
+                  <input type="radio" name="language" value="Turkish">
+                  <span class="contact-language__card">Turkish</span>
+                </label>
+              </div>
+            </fieldset>
+
+            <div class="contact-field">
+              <label class="contact-field__label" for="lead-gpa">High school GPA</label>
+              <input
+                class="contact-field__input"
+                id="lead-gpa"
+                name="gpa"
+                type="text"
+                placeholder="e.g. 15/20 or 3.5/4.0"
+                required
+              >
+              <p class="contact-field__hint">Helps us assess your admission options.</p>
+            </div>
+
+            <div class="contact-field">
+              <label class="contact-field__label" for="lead-budget">Approximate yearly budget</label>
+              <div class="contact-select-wrap">
+                <select class="contact-field__input contact-field__select" id="lead-budget" name="budget" required>
+                  <option value="" disabled selected>Select a range</option>
+                  <option value="Under 40,000 MAD / year">Under 40,000 MAD / year</option>
+                  <option value="40,000 – 70,000 MAD / year">40,000 – 70,000 MAD / year</option>
+                  <option value="70,000 – 100,000 MAD / year">70,000 – 100,000 MAD / year</option>
+                  <option value="100,000+ MAD / year">100,000+ MAD / year</option>
+                </select>
+              </div>
+              <p class="contact-field__hint">So we can recommend a university that fits your budget.</p>
+            </div>
+
+            <button class="contact-submit" type="submit">Get my options on WhatsApp</button>
+          </form>
+        </div>
+      </section>
     </div>
   </div>
 
