@@ -117,29 +117,19 @@
     if (!root) return;
 
     const viewport = root.querySelector(".pricing-viewport");
-    const track = root.querySelector(".pricing-track");
     const cards = Array.from(root.querySelectorAll(".pricing-card"));
     const prevBtn = root.querySelector(".pricing-nav--prev");
     const nextBtn = root.querySelector(".pricing-nav--next");
     const dots = Array.from(
       document.querySelectorAll(".pricing-dots .pricing-dot")
     );
-    if (!viewport || !track || cards.length < 3) return;
+    if (!viewport || cards.length < 3) return;
 
     let index = 1;
-    let trackTween = null;
-    let dragStartX = 0;
-    let dragOriginX = 0;
-    let isDragging = false;
+    let scrollRaf = 0;
     const reduceMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
     ).matches;
-
-    function getCenteredOffset(i) {
-      const card = cards[i];
-      const vpWidth = viewport.clientWidth;
-      return card.offsetLeft - (vpWidth - card.offsetWidth) / 2;
-    }
 
     function updateUI() {
       cards.forEach((card, i) => {
@@ -155,52 +145,45 @@
       if (nextBtn) nextBtn.disabled = index >= cards.length - 1;
     }
 
+    function nearestIndex() {
+      const mid = viewport.scrollLeft + viewport.clientWidth / 2;
+      let best = 0;
+      let bestDist = Infinity;
+      cards.forEach((card, i) => {
+        const center = card.offsetLeft + card.offsetWidth / 2;
+        const dist = Math.abs(center - mid);
+        if (dist < bestDist) {
+          bestDist = dist;
+          best = i;
+        }
+      });
+      return best;
+    }
+
     function goTo(nextIndex, animate) {
       index = Math.max(0, Math.min(cards.length - 1, nextIndex));
-      const x = -getCenteredOffset(index);
       updateUI();
 
-      if (trackTween) trackTween.kill();
-      if (!animate || reduceMotion || typeof gsap === "undefined") {
-        if (typeof gsap !== "undefined") gsap.set(track, { x });
-        else track.style.transform = `translate3d(${x}px, 0, 0)`;
-        return;
+      const card = cards[index];
+      const left =
+        card.offsetLeft - (viewport.clientWidth - card.offsetWidth) / 2;
+
+      if (animate && !reduceMotion && typeof viewport.scrollTo === "function") {
+        viewport.scrollTo({ left, behavior: "smooth" });
+      } else {
+        viewport.scrollLeft = left;
       }
+    }
 
-      trackTween = gsap.to(track, {
-        x,
-        duration: 0.55,
-        ease: "power3.out",
-        overwrite: true,
+    function onScroll() {
+      cancelAnimationFrame(scrollRaf);
+      scrollRaf = requestAnimationFrame(() => {
+        const next = nearestIndex();
+        if (next !== index) {
+          index = next;
+          updateUI();
+        }
       });
-    }
-
-    function onPointerDown(event) {
-      if (event.button != null && event.button !== 0) return;
-      isDragging = true;
-      dragStartX = event.clientX;
-      const current = gsap.getProperty(track, "x") || 0;
-      dragOriginX = Number(current);
-      if (trackTween) trackTween.kill();
-      viewport.setPointerCapture?.(event.pointerId);
-    }
-
-    function onPointerMove(event) {
-      if (!isDragging) return;
-      const dx = event.clientX - dragStartX;
-      const x = dragOriginX + dx;
-      if (typeof gsap !== "undefined") gsap.set(track, { x });
-      else track.style.transform = `translate3d(${x}px, 0, 0)`;
-    }
-
-    function onPointerUp(event) {
-      if (!isDragging) return;
-      isDragging = false;
-      const dx = event.clientX - dragStartX;
-      const threshold = Math.min(80, viewport.clientWidth * 0.15);
-      if (dx < -threshold) goTo(index + 1, true);
-      else if (dx > threshold) goTo(index - 1, true);
-      else goTo(index, true);
     }
 
     if (prevBtn) prevBtn.addEventListener("click", () => goTo(index - 1, true));
@@ -211,15 +194,16 @@
       });
     });
 
-    viewport.addEventListener("pointerdown", onPointerDown);
-    viewport.addEventListener("pointermove", onPointerMove);
-    viewport.addEventListener("pointerup", onPointerUp);
-    viewport.addEventListener("pointercancel", onPointerUp);
-
+    viewport.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", () => goTo(index, false));
-    // Center STANDARD after layout settles
-    requestAnimationFrame(() => goTo(1, false));
-    window.addEventListener("load", () => goTo(1, false), { once: true });
+
+    // Start on STANDARD after layout (and again after fonts/images)
+    const centerStandard = () => goTo(1, false);
+    centerStandard();
+    requestAnimationFrame(centerStandard);
+    window.addEventListener("load", centerStandard, { once: true });
+    setTimeout(centerStandard, 100);
+    setTimeout(centerStandard, 400);
   })();
 
   function ensureVisible(targets) {
