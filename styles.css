@@ -207,9 +207,9 @@ body.menu-open {
   left: 0;
   right: 0;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 28px 16px;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 1.5rem;
   background: transparent;
   border: none;
   box-shadow: none;
@@ -221,13 +221,17 @@ body.menu-open {
 
 .site-logo {
   display: block;
-  height: 90px;
+  height: 48px;
   width: auto;
 }
 
 @media (max-width: 600px) {
+  .site-header {
+    padding: 1rem;
+  }
+
   .site-logo {
-    height: 64px;
+    height: 48px;
   }
 }
 
