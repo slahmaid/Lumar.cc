@@ -24,7 +24,7 @@ Add a display-only programs section under the Welcome marquee so visitors can se
 
 - Optional small uppercase label + one short section headline
 - 2×2 image-led grid: photo (4:3) above title + body
-- 1 column below 900px, 2 columns at 900px+
+- **2 columns on all breakpoints** (including mobile), with tighter gaps and slightly smaller type on small screens
 - Typography/color match page: Poppins titles, Helvetica body, `#0c1e36`
 - No borders, shadows, radii, or links
 

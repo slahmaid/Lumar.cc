@@ -702,7 +702,7 @@ body.menu-open {
 .program-card-title {
   margin: 0;
   font-family: var(--font-display);
-  font-size: clamp(1.25rem, 2.2vw, 1.625rem);
+  font-size: clamp(0.9375rem, 2.2vw, 1.625rem);
   font-weight: 600;
   line-height: 1.25;
   letter-spacing: -0.02em;
@@ -712,9 +712,9 @@ body.menu-open {
 .program-card-text {
   margin: 0;
   font-family: var(--font-body);
-  font-size: clamp(1rem, 1.6vw, 1.1875rem);
+  font-size: clamp(0.8125rem, 1.6vw, 1.1875rem);
   font-weight: 400;
-  line-height: 1.65;
+  line-height: 1.5;
   color: #0c1e36;
 }
 
@@ -730,6 +730,14 @@ body.menu-open {
   .programs-grid {
     gap: 3rem 2.5rem;
   }
+
+  .program-card {
+    gap: 1rem;
+  }
+
+  .program-card-text {
+    line-height: 1.65;
+  }
 }
 
 @media (max-width: 767px) {
@@ -742,21 +750,11 @@ body.menu-open {
   }
 
   .programs-grid {
-    grid-template-columns: 1fr 1fr;
     gap: 1.5rem 0.85rem;
   }
 
   .program-card {
     gap: 0.65rem;
-  }
-
-  .program-card-title {
-    font-size: clamp(0.9375rem, 3.8vw, 1.125rem);
-  }
-
-  .program-card-text {
-    font-size: clamp(0.8125rem, 3.2vw, 0.9375rem);
-    line-height: 1.5;
   }
 
   .program-image {
