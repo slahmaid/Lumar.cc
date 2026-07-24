@@ -344,7 +344,7 @@ body.menu-open {
   }
 
   .page-after-scroll {
-    padding: 4.5rem 0 3rem;
+    padding: 4.5rem 0 0.5rem;
   }
 
   .after-title.text {
@@ -377,7 +377,7 @@ body.menu-open {
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  padding: 7rem 0 4rem;
+  padding: 7rem 0 1rem;
   width: 100%;
   box-sizing: border-box;
 }
@@ -552,7 +552,7 @@ body.menu-open {
 .text-marquee {
   width: 100%;
   overflow: hidden;
-  padding: 2.5rem 0;
+  padding: 2.5rem 0 1rem;
   margin-top: 0.5rem;
   white-space: nowrap;
 }
@@ -582,7 +582,7 @@ body.menu-open {
 
 .programs-section {
   width: 100%;
-  padding: 4rem 0 5rem;
+  padding: 1.5rem 0 5rem;
   box-sizing: border-box;
 }
 
@@ -673,7 +673,7 @@ body.menu-open {
 
 @media (min-width: 900px) {
   .programs-section {
-    padding: 5rem 0 6rem;
+    padding: 2rem 0 6rem;
   }
 
   .programs-title {
@@ -695,7 +695,7 @@ body.menu-open {
 
 @media (max-width: 767px) {
   .programs-section {
-    padding: 3rem 0 4rem;
+    padding: 1rem 0 4rem;
   }
 
   .programs-title {

@@ -27,6 +27,7 @@ Add a display-only programs section under the Welcome marquee so visitors can se
 - **2 columns on all breakpoints** (including mobile), with tighter gaps and slightly smaller type on small screens
 - Typography/color match page: Poppins titles, Helvetica body, `#0c1e36`
 - No borders, shadows, radii, or links
+- Tight spacing between marquee and programs section
 
 ## Motion
 
