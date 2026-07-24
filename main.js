@@ -532,8 +532,8 @@
 
           ScrollTrigger.create({
             trigger: card,
-            start: "top top",
-            end: isLast ? "+=40%" : "bottom top",
+            start: "top 12%",
+            end: isLast ? "+=30%" : "bottom top",
             pin: true,
             pinSpacing: isLast,
             anticipatePin: 1,
@@ -545,13 +545,13 @@
               inner,
               { scale: 1, filter: "brightness(1)" },
               {
-                scale: 0.92,
-                filter: "brightness(0.72)",
+                scale: 0.96,
+                filter: "brightness(0.88)",
                 ease: "none",
                 scrollTrigger: {
                   trigger: stackCards[index + 1],
                   start: "top bottom",
-                  end: "top top",
+                  end: "top 12%",
                   scrub: true,
                   invalidateOnRefresh: true,
                 },
