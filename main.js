@@ -583,6 +583,32 @@
         );
       }
 
+      const uniCards = gsap.utils.toArray(".uni-stack__card");
+      if (uniCards.length && typeof ScrollTrigger !== "undefined") {
+        uniCards.forEach((card, index) => {
+          const content = card.querySelector(".uni-stack__content");
+          const next = uniCards[index + 1];
+          if (!content || !next) return;
+
+          gsap.fromTo(
+            content,
+            { scale: 1, filter: "brightness(1)" },
+            {
+              scale: 0.92,
+              filter: "brightness(0.7)",
+              ease: "none",
+              scrollTrigger: {
+                trigger: next,
+                start: "top bottom",
+                end: "top 10%",
+                scrub: true,
+                invalidateOnRefresh: true,
+              },
+            }
+          );
+        });
+      }
+
       window.addEventListener("load", () => {
         if (typeof ScrollTrigger !== "undefined") ScrollTrigger.refresh();
       });
@@ -612,6 +638,7 @@
           ".program-card",
           ".program-image-wrap",
           ".program-image",
+          ".uni-stack__content",
         ]);
       };
     });
