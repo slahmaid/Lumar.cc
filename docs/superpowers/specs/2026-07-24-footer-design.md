@@ -15,7 +15,7 @@ Inside `#smooth-content`, after `#faq`.
 1. Centered footer logo (`logo-footer.png`)
 2. “Morocco and Istanbul”
 3. “© 2026 LUMAR”
-4. Giant decorative “LUMAR” wordmark — top half visible, bottom clipped (`overflow` + half-em height)
+4. Giant decorative “LUMAR” wordmark — top ~⅔ visible, bottom third clipped (`overflow` + 0.67em height)
 
 ## Look
 

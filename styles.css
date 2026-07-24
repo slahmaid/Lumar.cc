@@ -1594,7 +1594,7 @@ body.menu-open {
   margin: 2.5rem 0 0;
   margin-left: calc(50% - 50vw);
   overflow: hidden;
-  height: 0.52em;
+  height: 0.67em;
   font-size: clamp(5.5rem, 28vw, 18rem);
   line-height: 1;
   pointer-events: none;
