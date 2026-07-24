@@ -98,6 +98,19 @@
     });
   }
 
+  const discoverBtn = document.getElementById("hero-discover");
+  if (discoverBtn) {
+    discoverBtn.addEventListener("click", () => {
+      const target = document.querySelector("#programs");
+      if (!target) return;
+      if (smoother) {
+        smoother.scrollTo(target, true, "top 80px");
+      } else {
+        target.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    });
+  }
+
   function ensureVisible(targets) {
     const els = gsap.utils.toArray(targets);
     if (!els.length) return;
