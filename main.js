@@ -578,6 +578,44 @@
         });
       }
 
+      const stackCards = gsap.utils.toArray(".stack-card");
+
+      if (stackCards.length && typeof ScrollTrigger !== "undefined") {
+        stackCards.forEach((card, index) => {
+          const inner = card.querySelector(".stack-card-inner");
+          const isLast = index === stackCards.length - 1;
+
+          ScrollTrigger.create({
+            trigger: card,
+            start: "top top",
+            end: isLast ? "+=40%" : "bottom top",
+            pin: true,
+            pinSpacing: isLast,
+            anticipatePin: 1,
+            invalidateOnRefresh: true,
+          });
+
+          if (!isLast && inner) {
+            gsap.fromTo(
+              inner,
+              { scale: 1, filter: "brightness(1)" },
+              {
+                scale: 0.92,
+                filter: "brightness(0.72)",
+                ease: "none",
+                scrollTrigger: {
+                  trigger: stackCards[index + 1],
+                  start: "top bottom",
+                  end: "top top",
+                  scrub: true,
+                  invalidateOnRefresh: true,
+                },
+              }
+            );
+          }
+        });
+      }
+
       window.addEventListener("load", () => {
         if (typeof ScrollTrigger !== "undefined") ScrollTrigger.refresh();
       });
