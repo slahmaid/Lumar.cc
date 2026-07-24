@@ -963,18 +963,15 @@ body.menu-open {
   grid-column: 1 / -1;
   grid-row: 1;
   width: 100%;
-  overflow-x: auto;
-  overflow-y: hidden;
-  scroll-snap-type: x mandatory;
-  scroll-behavior: smooth;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-  touch-action: pan-x;
+  overflow: hidden;
+  touch-action: pan-y;
   padding: 0.5rem 0 1rem;
+  cursor: grab;
+  user-select: none;
 }
 
-.pricing-viewport::-webkit-scrollbar {
-  display: none;
+.pricing-viewport.is-dragging {
+  cursor: grabbing;
 }
 
 .pricing-track {
@@ -983,14 +980,13 @@ body.menu-open {
   gap: 1rem;
   width: max-content;
   min-height: 1px;
-  padding-inline: max(1.25rem, calc(50% - min(39vw, 150px)));
-  box-sizing: content-box;
+  will-change: transform;
+  padding-inline: 0;
+  box-sizing: border-box;
 }
 
 .pricing-card {
   flex: 0 0 min(78vw, 300px);
-  scroll-snap-align: center;
-  scroll-snap-stop: always;
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -1005,6 +1001,7 @@ body.menu-open {
   opacity: 0.5;
   transform: scale(0.94);
   transition: opacity 0.35s ease, transform 0.35s ease, border-color 0.35s ease;
+  pointer-events: auto;
 }
 
 .pricing-card.is-active {
@@ -1195,7 +1192,6 @@ body.menu-open {
 
   .pricing-track {
     gap: 1.25rem;
-    padding-inline: max(1.5rem, calc(50% - 160px));
   }
 
   .pricing-card {
