@@ -1594,7 +1594,6 @@ body.menu-open {
   margin: 2.5rem 0 0;
   margin-left: calc(50% - 50vw);
   overflow: hidden;
-  height: 0.67em;
   font-size: clamp(5.5rem, 28vw, 18rem);
   line-height: 1;
   pointer-events: none;
@@ -1610,6 +1609,9 @@ body.menu-open {
   text-align: center;
   white-space: nowrap;
   color: rgba(255, 255, 255, 0.12);
+  /* Show top 2/3 of the letters; clip the bottom third */
+  clip-path: inset(0 0 33.333% 0);
+  margin-bottom: -0.333em;
 }
 
 @media (max-width: 767px) {
