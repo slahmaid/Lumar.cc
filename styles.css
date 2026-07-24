@@ -346,6 +346,74 @@ body.menu-open {
   object-fit: cover;
 }
 
+@media (max-width: 767px) {
+  .pin-section {
+    height: auto;
+    overflow: visible;
+    grid-template-rows: none;
+    gap: 1rem;
+    padding: 0 1rem;
+  }
+
+  .pin-content {
+    width: 100%;
+    grid-template-columns: 1fr;
+    will-change: auto;
+  }
+
+  .pin-box {
+    position: relative;
+    height: 38vh;
+    min-height: 200px;
+  }
+
+  .parallax-section {
+    height: 70vh;
+    padding: 0 1rem;
+  }
+
+  .parallax-image {
+    height: 100%;
+  }
+
+  .grid-layout {
+    grid-gap: 0.65rem;
+  }
+
+  .column-content {
+    grid-template-rows: 32vh 32vh 32vh;
+    grid-gap: 0.65rem;
+  }
+
+  .hero-word,
+  .after-line,
+  .after-word,
+  .after-image,
+  .parallax-image {
+    will-change: auto;
+  }
+
+  .page-after-scroll {
+    padding: 4.5rem 0 3rem;
+  }
+
+  .after-title.text {
+    padding: 8% 2%;
+    font-size: clamp(1.75rem, 8.5vw, 2.75rem);
+  }
+
+  .after-body-text,
+  .after-fact,
+  .after-title {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .after-image-wrap {
+    clip-path: none;
+  }
+}
+
 .spacer {
   height: 20vh;
   display: flex;
