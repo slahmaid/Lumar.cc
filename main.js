@@ -111,64 +111,25 @@
     });
   }
 
-  // Pricing packages carousel — drag/swipe (ScrollSmoother-safe)
+  // Pricing packages carousel — starts on STANDARD (index 1)
   (function initPricingSlider() {
     const root = document.querySelector("[data-pricing-slider]");
     if (!root) return;
 
     const viewport = root.querySelector(".pricing-viewport");
-    const track = root.querySelector(".pricing-track");
     const cards = Array.from(root.querySelectorAll(".pricing-card"));
     const prevBtn = root.querySelector(".pricing-nav--prev");
     const nextBtn = root.querySelector(".pricing-nav--next");
     const dots = Array.from(
       document.querySelectorAll(".pricing-dots .pricing-dot")
     );
-    if (!viewport || !track || cards.length < 3) return;
+    if (!viewport || cards.length < 3) return;
 
     let index = 1;
-    let trackX = 0;
-    let trackTween = null;
-    let pointerId = null;
-    let startX = 0;
-    let startY = 0;
-    let originX = 0;
-    let axis = null;
-    let didDrag = false;
+    let scrollRaf = 0;
     const reduceMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
     ).matches;
-
-    function setTrackX(x, animate) {
-      trackX = x;
-      if (trackTween) {
-        trackTween.kill();
-        trackTween = null;
-      }
-      if (typeof gsap === "undefined") {
-        track.style.transform = `translate3d(${x}px, 0, 0)`;
-        return;
-      }
-      if (animate && !reduceMotion) {
-        trackTween = gsap.to(track, {
-          x,
-          duration: 0.5,
-          ease: "power3.out",
-          overwrite: true,
-        });
-      } else {
-        gsap.set(track, { x });
-      }
-    }
-
-    function centeredX(i) {
-      const card = cards[i];
-      return -(card.offsetLeft - (viewport.clientWidth - card.offsetWidth) / 2);
-    }
-
-    function clampIndex(i) {
-      return Math.max(0, Math.min(cards.length - 1, i));
-    }
 
     function updateUI() {
       cards.forEach((card, i) => {
@@ -184,17 +145,13 @@
       if (nextBtn) nextBtn.disabled = index >= cards.length - 1;
     }
 
-    function goTo(nextIndex, animate) {
-      index = clampIndex(nextIndex);
-      updateUI();
-      setTrackX(centeredX(index), animate);
-    }
-
-    function nearestFromX(x) {
+    function nearestIndex() {
+      const mid = viewport.scrollLeft + viewport.clientWidth / 2;
       let best = 0;
       let bestDist = Infinity;
-      cards.forEach((_, i) => {
-        const dist = Math.abs(centeredX(i) - x);
+      cards.forEach((card, i) => {
+        const center = card.offsetLeft + card.offsetWidth / 2;
+        const dist = Math.abs(center - mid);
         if (dist < bestDist) {
           bestDist = dist;
           best = i;
@@ -203,93 +160,30 @@
       return best;
     }
 
-    function pauseSmoother(paused) {
-      if (smoother && typeof smoother.paused === "function") {
-        smoother.paused(paused);
-      }
-    }
-
-    function onPointerDown(event) {
-      if (event.button != null && event.button !== 0) return;
-      if (event.target.closest("a, button")) return;
-
-      pointerId = event.pointerId;
-      startX = event.clientX;
-      startY = event.clientY;
-      originX = trackX;
-      axis = null;
-      didDrag = false;
-      viewport.classList.add("is-dragging");
-      if (trackTween) {
-        trackTween.kill();
-        trackTween = null;
-      }
-      viewport.setPointerCapture?.(pointerId);
-    }
-
-    function onPointerMove(event) {
-      if (pointerId == null || event.pointerId !== pointerId) return;
-
-      const dx = event.clientX - startX;
-      const dy = event.clientY - startY;
-
-      if (!axis) {
-        if (Math.abs(dx) < 8 && Math.abs(dy) < 8) return;
-        axis = Math.abs(dx) >= Math.abs(dy) ? "x" : "y";
-        if (axis === "x") pauseSmoother(true);
-      }
-
-      if (axis !== "x") return;
-
-      event.preventDefault();
-      didDrag = true;
-      setTrackX(originX + dx, false);
-    }
-
-    function onPointerUp(event) {
-      if (pointerId == null || event.pointerId !== pointerId) return;
-
-      viewport.classList.remove("is-dragging");
-      viewport.releasePointerCapture?.(pointerId);
-      pointerId = null;
-
-      if (axis === "x") {
-        pauseSmoother(false);
-        const dx = event.clientX - startX;
-        const threshold = Math.min(56, viewport.clientWidth * 0.12);
-        if (dx < -threshold) goTo(index + 1, true);
-        else if (dx > threshold) goTo(index - 1, true);
-        else goTo(nearestFromX(trackX), true);
-      } else {
-        goTo(index, false);
-      }
-
-      axis = null;
-    }
-
-    function onWheel(event) {
-      const horizontal =
-        Math.abs(event.deltaX) > Math.abs(event.deltaY) || event.shiftKey;
-      if (!horizontal && Math.abs(event.deltaY) < 1) return;
-      if (!horizontal) return;
-
-      event.preventDefault();
-      const delta = event.shiftKey ? event.deltaY : event.deltaX || event.deltaY;
-      const nextX = trackX - delta;
-      const minX = centeredX(cards.length - 1);
-      const maxX = centeredX(0);
-      setTrackX(Math.min(maxX, Math.max(minX, nextX)), false);
-      index = nearestFromX(trackX);
+    function goTo(nextIndex, animate) {
+      index = Math.max(0, Math.min(cards.length - 1, nextIndex));
       updateUI();
+
+      const card = cards[index];
+      const left =
+        card.offsetLeft - (viewport.clientWidth - card.offsetWidth) / 2;
+
+      if (animate && !reduceMotion && typeof viewport.scrollTo === "function") {
+        viewport.scrollTo({ left, behavior: "smooth" });
+      } else {
+        viewport.scrollLeft = left;
+      }
     }
 
-    function onClickCapture(event) {
-      if (!didDrag) return;
-      if (event.target.closest("a")) {
-        event.preventDefault();
-        event.stopPropagation();
-      }
-      didDrag = false;
+    function onScroll() {
+      cancelAnimationFrame(scrollRaf);
+      scrollRaf = requestAnimationFrame(() => {
+        const next = nearestIndex();
+        if (next !== index) {
+          index = next;
+          updateUI();
+        }
+      });
     }
 
     if (prevBtn) prevBtn.addEventListener("click", () => goTo(index - 1, true));
@@ -300,21 +194,64 @@
       });
     });
 
-    viewport.addEventListener("pointerdown", onPointerDown);
-    viewport.addEventListener("pointermove", onPointerMove, { passive: false });
-    viewport.addEventListener("pointerup", onPointerUp);
-    viewport.addEventListener("pointercancel", onPointerUp);
-    viewport.addEventListener("wheel", onWheel, { passive: false });
-    viewport.addEventListener("click", onClickCapture, true);
-
+    viewport.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", () => goTo(index, false));
 
+    // Horizontal swipe between plans without blocking vertical page scroll
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let touchAxis = null;
+
+    viewport.addEventListener(
+      "touchstart",
+      (event) => {
+        const t = event.changedTouches[0];
+        touchStartX = t.clientX;
+        touchStartY = t.clientY;
+        touchAxis = null;
+      },
+      { passive: true }
+    );
+
+    viewport.addEventListener(
+      "touchmove",
+      (event) => {
+        if (touchAxis) return;
+        const t = event.changedTouches[0];
+        const dx = t.clientX - touchStartX;
+        const dy = t.clientY - touchStartY;
+        if (Math.abs(dx) < 10 && Math.abs(dy) < 10) return;
+        touchAxis = Math.abs(dx) > Math.abs(dy) ? "x" : "y";
+      },
+      { passive: true }
+    );
+
+    viewport.addEventListener(
+      "touchend",
+      (event) => {
+        const t = event.changedTouches[0];
+        const dx = t.clientX - touchStartX;
+        const dy = t.clientY - touchStartY;
+        const wasHorizontal =
+          touchAxis === "x" ||
+          (touchAxis == null && Math.abs(dx) > Math.abs(dy));
+        touchAxis = null;
+        if (!wasHorizontal || Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy)) {
+          return;
+        }
+        if (dx < 0) goTo(index + 1, true);
+        else goTo(index - 1, true);
+      },
+      { passive: true }
+    );
+
+    // Start on STANDARD after layout (and again after fonts/images)
     const centerStandard = () => goTo(1, false);
     centerStandard();
     requestAnimationFrame(centerStandard);
     window.addEventListener("load", centerStandard, { once: true });
-    setTimeout(centerStandard, 120);
-    setTimeout(centerStandard, 450);
+    setTimeout(centerStandard, 100);
+    setTimeout(centerStandard, 400);
   })();
 
   function ensureVisible(targets) {
