@@ -18,5 +18,5 @@ Inside `#smooth-content`, after `#faq`.
 
 ## Look
 
-- Hairline top border; navy `#0c1e36` type; white page background
-- Logo centered at top of footer block; generous padding
+- Full-bleed black bar (matches `logo-footer.png` black canvas so gold L reads)
+- Light type on black; logo centered at top; generous padding

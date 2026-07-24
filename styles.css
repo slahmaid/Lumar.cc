@@ -1546,8 +1546,10 @@ body.menu-open {
   }
 }
 
-/* Site footer */
+/* Site footer — dark bar so logo-footer.png (gold on black) reads clearly */
 .site-footer {
+  position: relative;
+  z-index: 5;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -1555,15 +1557,16 @@ body.menu-open {
   text-align: center;
   padding: 3.5rem 1.5rem 3rem;
   box-sizing: border-box;
-  border-top: 1px solid rgba(12, 30, 54, 0.15);
-  background: #fff;
+  background: #000;
+  color: #fff;
 }
 
 .site-footer__logo {
   display: block;
   width: auto;
-  height: clamp(72px, 14vw, 110px);
-  margin: 0 0 1.5rem;
+  max-width: min(220px, 55vw);
+  height: clamp(88px, 16vw, 128px);
+  margin: 0 0 1.25rem;
   object-fit: contain;
 }
 
@@ -1574,7 +1577,7 @@ body.menu-open {
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: rgba(12, 30, 54, 0.55);
+  color: rgba(255, 255, 255, 0.55);
 }
 
 .site-footer__copy {
@@ -1582,7 +1585,7 @@ body.menu-open {
   font-family: var(--font-body);
   font-size: 0.875rem;
   line-height: 1.4;
-  color: #0c1e36;
+  color: rgba(255, 255, 255, 0.85);
 }
 
 @media (max-width: 767px) {
