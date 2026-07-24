@@ -616,6 +616,7 @@ body.menu-open {
   overflow: hidden;
   transform-origin: center top;
   background: #0c1e36;
+  border-radius: clamp(1rem, 2.5vw, 1.75rem);
   will-change: transform, filter;
 }
 
