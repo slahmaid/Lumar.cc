@@ -19,6 +19,9 @@
   const menuLinks = siteMenu ? gsap.utils.toArray(".site-menu-link") : [];
   const siteHeader = document.querySelector(".site-header");
   const heroTitle = document.querySelector(".logo-section .hero-title");
+  const pinSection = document.querySelector(".pin-section");
+  const pinContent1 = document.querySelector(".pin-content-1");
+  const pinContent2 = document.querySelector(".pin-content-2");
   const marqueeTrack = document.querySelector(".text-marquee-track");
   // Prefer coarse pointer over maxTouchPoints — Windows laptops often report
   // touch points even when used with a mouse, which was muting animations.
@@ -151,7 +154,7 @@
   const mm = gsap.matchMedia();
 
   mm.add("(prefers-reduced-motion: reduce)", () => {
-      ensureVisible([
+    ensureVisible([
       ".hero-word",
       ".after-title",
       ".after-body-text",
@@ -161,6 +164,10 @@
       ".grid-layout",
       ".grid-image",
       ".parallax-section",
+      ".pin-content",
+      ".program-card",
+      ".program-image-wrap",
+      ".program-image",
     ]);
 
     if (siteHeader) {
@@ -287,6 +294,57 @@
           scrub: 1.2,
           invalidateOnRefresh: true,
         },
+      });
+
+      const desktop = gsap.matchMedia();
+
+      // Horizontal pin scrub — desktop/tablet widths only (mobile uses stacked CSS)
+      desktop.add("(min-width: 768px)", () => {
+        if (pinSection && pinContent1 && pinContent2) {
+          const pinTl = gsap.timeline({
+            scrollTrigger: {
+              pin: true,
+              trigger: pinSection,
+              scrub: 1.2,
+              start: "top top",
+              end: () => "+=" + pinContent1.offsetWidth,
+              invalidateOnRefresh: true,
+              anticipatePin: 1,
+            },
+          });
+
+          pinTl.fromTo(
+            ".pin-content-1",
+            { x: () => document.body.clientWidth * 0.9 },
+            { x: () => -pinContent1.offsetWidth, ease: "none" },
+            0
+          );
+
+          pinTl.fromTo(
+            ".pin-content-2",
+            {
+              x: () =>
+                -pinContent2.offsetWidth + document.body.clientWidth * 0.1,
+            },
+            { x: () => document.body.clientWidth, ease: "none" },
+            0
+          );
+        }
+
+        return () => {
+          ensureVisible([".pin-content-1", ".pin-content-2"]);
+        };
+      });
+
+      desktop.add("(max-width: 767px)", () => {
+        if (pinContent1 && pinContent2) {
+          gsap.set([pinContent1, pinContent2], {
+            x: 0,
+            clearProps: "transform",
+          });
+        }
+
+        return () => {};
       });
 
       let afterSplit = null;
@@ -457,7 +515,7 @@
           // Last-resort visibility if a tween never starts (plugin/layout glitch).
           setTimeout(() => {
             const stuck = document.querySelectorAll(
-              ".after-line, .after-word, .after-fact, .after-image-wrap"
+              ".after-line, .after-word, .after-fact, .after-image-wrap, .program-card, .program-image-wrap"
             );
             stuck.forEach((el) => {
               const opacity = window.getComputedStyle(el).opacity;
@@ -523,42 +581,61 @@
         });
       }
 
-      const stackCards = gsap.utils.toArray(".stack-card");
+      const programCards = gsap.utils.toArray(".program-card");
+      let programsReveal = null;
 
-      if (stackCards.length && typeof ScrollTrigger !== "undefined") {
-        stackCards.forEach((card, index) => {
-          const inner = card.querySelector(".stack-card-inner");
-          const isLast = index === stackCards.length - 1;
-
-          ScrollTrigger.create({
-            trigger: card,
-            start: "top 12%",
-            end: isLast ? "+=30%" : "bottom top",
-            pin: true,
-            pinSpacing: isLast,
-            anticipatePin: 1,
-            invalidateOnRefresh: true,
-          });
-
-          if (!isLast && inner) {
-            gsap.fromTo(
-              inner,
-              { scale: 1, filter: "brightness(1)" },
-              {
-                scale: 0.96,
-                filter: "brightness(0.88)",
-                ease: "none",
-                scrollTrigger: {
-                  trigger: stackCards[index + 1],
-                  start: "top bottom",
-                  end: "top 12%",
-                  scrub: true,
-                  invalidateOnRefresh: true,
-                },
-              }
-            );
+      if (programCards.length) {
+        programsReveal = gsap.fromTo(
+          programCards,
+          { y: 28, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.8,
+            ease: "power3.out",
+            stagger: 0.12,
+            scrollTrigger: {
+              trigger: ".programs-section",
+              start: "top 85%",
+              once: true,
+              toggleActions: "play none none none",
+            },
           }
-        });
+        );
+
+        gsap.fromTo(
+          ".program-image-wrap",
+          { clipPath: "inset(100% 0 0 0)" },
+          {
+            clipPath: "inset(0% 0 0 0)",
+            duration: 1.1,
+            ease: "power3.out",
+            stagger: 0.12,
+            scrollTrigger: {
+              trigger: ".programs-section",
+              start: "top 80%",
+              once: true,
+              toggleActions: "play none none none",
+            },
+          }
+        );
+
+        gsap.fromTo(
+          ".program-image",
+          { scale: 1.12 },
+          {
+            scale: 1,
+            duration: 1.1,
+            ease: "power3.out",
+            stagger: 0.12,
+            scrollTrigger: {
+              trigger: ".programs-section",
+              start: "top 80%",
+              once: true,
+              toggleActions: "play none none none",
+            },
+          }
+        );
       }
 
       window.addEventListener("load", () => {
@@ -573,12 +650,14 @@
         killTween(afterImageReveal);
         killTween(afterImageScale);
         killTween(afterFactsReveal);
+        killTween(programsReveal);
         if (afterSplit) afterSplit.revert();
         if (afterBodySplit) afterBodySplit.revert();
         if (smoother) {
           smoother.kill();
           smoother = null;
         }
+        desktop.revert();
         ensureVisible([
           ".after-title",
           ".after-body-text",
@@ -586,6 +665,9 @@
           ".after-image",
           ".after-fact",
           ".hero-word",
+          ".program-card",
+          ".program-image-wrap",
+          ".program-image",
         ]);
       };
     });
