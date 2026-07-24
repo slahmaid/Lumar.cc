@@ -307,6 +307,22 @@
     });
   })();
 
+  // FAQ accordion — one open item at a time
+  (function initFaqAccordion() {
+    const root = document.querySelector("[data-faq-accordion]");
+    if (!root) return;
+
+    const items = Array.from(root.querySelectorAll(".faq-item"));
+    items.forEach((item) => {
+      item.addEventListener("toggle", () => {
+        if (!item.open) return;
+        items.forEach((other) => {
+          if (other !== item) other.open = false;
+        });
+      });
+    });
+  })();
+
   function ensureVisible(targets) {
     const els = gsap.utils.toArray(targets);
     if (!els.length) return;
