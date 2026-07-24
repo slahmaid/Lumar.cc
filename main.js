@@ -111,6 +111,117 @@
     });
   }
 
+  // Pricing packages carousel — starts on STANDARD (index 1)
+  (function initPricingSlider() {
+    const root = document.querySelector("[data-pricing-slider]");
+    if (!root) return;
+
+    const viewport = root.querySelector(".pricing-viewport");
+    const track = root.querySelector(".pricing-track");
+    const cards = Array.from(root.querySelectorAll(".pricing-card"));
+    const prevBtn = root.querySelector(".pricing-nav--prev");
+    const nextBtn = root.querySelector(".pricing-nav--next");
+    const dots = Array.from(
+      document.querySelectorAll(".pricing-dots .pricing-dot")
+    );
+    if (!viewport || !track || cards.length < 3) return;
+
+    let index = 1;
+    let trackTween = null;
+    let dragStartX = 0;
+    let dragOriginX = 0;
+    let isDragging = false;
+    const reduceMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+    function getCenteredOffset(i) {
+      const card = cards[i];
+      const vpWidth = viewport.clientWidth;
+      return card.offsetLeft - (vpWidth - card.offsetWidth) / 2;
+    }
+
+    function updateUI() {
+      cards.forEach((card, i) => {
+        card.classList.toggle("is-active", i === index);
+      });
+      dots.forEach((dot, i) => {
+        const active = i === index;
+        dot.classList.toggle("is-active", active);
+        if (active) dot.setAttribute("aria-current", "true");
+        else dot.removeAttribute("aria-current");
+      });
+      if (prevBtn) prevBtn.disabled = index <= 0;
+      if (nextBtn) nextBtn.disabled = index >= cards.length - 1;
+    }
+
+    function goTo(nextIndex, animate) {
+      index = Math.max(0, Math.min(cards.length - 1, nextIndex));
+      const x = -getCenteredOffset(index);
+      updateUI();
+
+      if (trackTween) trackTween.kill();
+      if (!animate || reduceMotion || typeof gsap === "undefined") {
+        if (typeof gsap !== "undefined") gsap.set(track, { x });
+        else track.style.transform = `translate3d(${x}px, 0, 0)`;
+        return;
+      }
+
+      trackTween = gsap.to(track, {
+        x,
+        duration: 0.55,
+        ease: "power3.out",
+        overwrite: true,
+      });
+    }
+
+    function onPointerDown(event) {
+      if (event.button != null && event.button !== 0) return;
+      isDragging = true;
+      dragStartX = event.clientX;
+      const current = gsap.getProperty(track, "x") || 0;
+      dragOriginX = Number(current);
+      if (trackTween) trackTween.kill();
+      viewport.setPointerCapture?.(event.pointerId);
+    }
+
+    function onPointerMove(event) {
+      if (!isDragging) return;
+      const dx = event.clientX - dragStartX;
+      const x = dragOriginX + dx;
+      if (typeof gsap !== "undefined") gsap.set(track, { x });
+      else track.style.transform = `translate3d(${x}px, 0, 0)`;
+    }
+
+    function onPointerUp(event) {
+      if (!isDragging) return;
+      isDragging = false;
+      const dx = event.clientX - dragStartX;
+      const threshold = Math.min(80, viewport.clientWidth * 0.15);
+      if (dx < -threshold) goTo(index + 1, true);
+      else if (dx > threshold) goTo(index - 1, true);
+      else goTo(index, true);
+    }
+
+    if (prevBtn) prevBtn.addEventListener("click", () => goTo(index - 1, true));
+    if (nextBtn) nextBtn.addEventListener("click", () => goTo(index + 1, true));
+    dots.forEach((dot) => {
+      dot.addEventListener("click", () => {
+        goTo(Number(dot.dataset.index) || 0, true);
+      });
+    });
+
+    viewport.addEventListener("pointerdown", onPointerDown);
+    viewport.addEventListener("pointermove", onPointerMove);
+    viewport.addEventListener("pointerup", onPointerUp);
+    viewport.addEventListener("pointercancel", onPointerUp);
+
+    window.addEventListener("resize", () => goTo(index, false));
+    // Center STANDARD after layout settles
+    requestAnimationFrame(() => goTo(1, false));
+    window.addEventListener("load", () => goTo(1, false), { once: true });
+  })();
+
   function ensureVisible(targets) {
     const els = gsap.utils.toArray(targets);
     if (!els.length) return;
