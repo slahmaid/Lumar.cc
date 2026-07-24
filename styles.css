@@ -667,7 +667,7 @@ body.menu-open {
 
 .programs-grid {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: 1fr 1fr;
   gap: 2.5rem 2rem;
   width: 100%;
 }
@@ -728,7 +728,6 @@ body.menu-open {
   }
 
   .programs-grid {
-    grid-template-columns: 1fr 1fr;
     gap: 3rem 2.5rem;
   }
 }
@@ -740,6 +739,24 @@ body.menu-open {
 
   .programs-title {
     margin-bottom: 2.25rem;
+  }
+
+  .programs-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem 0.85rem;
+  }
+
+  .program-card {
+    gap: 0.65rem;
+  }
+
+  .program-card-title {
+    font-size: clamp(0.9375rem, 3.8vw, 1.125rem);
+  }
+
+  .program-card-text {
+    font-size: clamp(0.8125rem, 3.2vw, 0.9375rem);
+    line-height: 1.5;
   }
 
   .program-image {
