@@ -19,9 +19,6 @@
   const menuLinks = siteMenu ? gsap.utils.toArray(".site-menu-link") : [];
   const siteHeader = document.querySelector(".site-header");
   const heroTitle = document.querySelector(".logo-section .hero-title");
-  const pinSection = document.querySelector(".pin-section");
-  const pinContent1 = document.querySelector(".pin-content-1");
-  const pinContent2 = document.querySelector(".pin-content-2");
   const marqueeTrack = document.querySelector(".text-marquee-track");
   // Prefer coarse pointer over maxTouchPoints — Windows laptops often report
   // touch points even when used with a mouse, which was muting animations.
@@ -164,7 +161,6 @@
       ".grid-layout",
       ".grid-image",
       ".parallax-section",
-      ".pin-content",
       ".program-card",
       ".program-image-wrap",
       ".program-image",
@@ -294,57 +290,6 @@
           scrub: 1.2,
           invalidateOnRefresh: true,
         },
-      });
-
-      const desktop = gsap.matchMedia();
-
-      // Horizontal pin scrub — desktop/tablet widths only (mobile uses stacked CSS)
-      desktop.add("(min-width: 768px)", () => {
-        if (pinSection && pinContent1 && pinContent2) {
-          const pinTl = gsap.timeline({
-            scrollTrigger: {
-              pin: true,
-              trigger: pinSection,
-              scrub: 1.2,
-              start: "top top",
-              end: () => "+=" + pinContent1.offsetWidth,
-              invalidateOnRefresh: true,
-              anticipatePin: 1,
-            },
-          });
-
-          pinTl.fromTo(
-            ".pin-content-1",
-            { x: () => document.body.clientWidth * 0.9 },
-            { x: () => -pinContent1.offsetWidth, ease: "none" },
-            0
-          );
-
-          pinTl.fromTo(
-            ".pin-content-2",
-            {
-              x: () =>
-                -pinContent2.offsetWidth + document.body.clientWidth * 0.1,
-            },
-            { x: () => document.body.clientWidth, ease: "none" },
-            0
-          );
-        }
-
-        return () => {
-          ensureVisible([".pin-content-1", ".pin-content-2"]);
-        };
-      });
-
-      desktop.add("(max-width: 767px)", () => {
-        if (pinContent1 && pinContent2) {
-          gsap.set([pinContent1, pinContent2], {
-            x: 0,
-            clearProps: "transform",
-          });
-        }
-
-        return () => {};
       });
 
       let afterSplit = null;
@@ -657,7 +602,6 @@
           smoother.kill();
           smoother = null;
         }
-        desktop.revert();
         ensureVisible([
           ".after-title",
           ".after-body-text",
