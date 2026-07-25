@@ -26,11 +26,23 @@ jobs:
 
       - name: Prepare site files
         run: |
+          set -euo pipefail
           mkdir -p _site/fr _site/ar
           cp index.html main.js styles.css .nojekyll _site/
-          cp fr/index.html _site/fr/
-          cp ar/index.html _site/ar/
+          cp fr/index.html _site/fr/index.html
+          cp ar/index.html _site/ar/index.html
           cp -R brand ScrollSmoother _site/
+
+          # Fail fast if locales or assets are missing
+          test -f _site/index.html
+          test -f _site/fr/index.html
+          test -f _site/ar/index.html
+          test -f _site/main.js
+          test -f _site/styles.css
+          test -d _site/brand
+          test -d _site/ScrollSmoother
+          echo "Site bundle ready:"
+          find _site -type f | sort | head -n 50
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
