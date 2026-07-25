@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LUMAR</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles.css?v=11">
+</head>
+<body>
+  <button
+    type="button"
+    class="hamburger"
+    id="hamburger-12"
+    aria-label="Menu"
+    aria-expanded="false"
+    aria-controls="site-menu"
+  >
+    <span class="line"></span>
+    <span class="line"></span>
+    <span class="line"></span>
+  </button>
+
+  <nav class="site-menu" id="site-menu" aria-hidden="true">
+    <ul class="site-menu-list">
+      <li><a class="site-menu-link" href="#about">À propos</a></li>
+      <li><a class="site-menu-link" href="#programs">Programmes</a></li>
+      <li><a class="site-menu-link" href="#universities">Universités</a></li>
+      <li><a class="site-menu-link" href="#packages">Formules</a></li>
+      <li><a class="site-menu-link" href="#contact">Contact</a></li>
+      <li class="site-menu-lang">
+        <a class="site-menu-link site-menu-link--lang" href="../">English</a>
+        <span class="site-menu-lang-sep" aria-hidden="true">/</span>
+        <a class="site-menu-link site-menu-link--lang" href="./" aria-current="page">Français</a>
+        <span class="site-menu-lang-sep" aria-hidden="true">/</span>
+        <a class="site-menu-link site-menu-link--lang" href="../ar/" lang="ar">العربية</a>
+      </li>
+    </ul>
+  </nav>
+
+  <header class="site-header">
+    <img class="site-logo" src="../brand/logo.png" alt="Logo LUMAR">
+  </header>
+
+  <div id="smooth-wrapper">
+    <div id="smooth-content">
+      <div class="scroll-smoother-section">
+      <div class="logo-section">
+        <h1 class="hero-title">Intégrez une université turque sans deviner quel formulaire va où</h1>
+        <button type="button" class="cssbuttons-io-button" id="hero-discover" aria-label="Découvrir les programmes">
+          Découvrir
+          <div class="icon" aria-hidden="true">
+            <svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M0 0h24v24H0z" fill="none"></path>
+              <path d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z" fill="currentColor"></path>
+            </svg>
+          </div>
+        </button>
+      </div>
+
+      <div class="grid-section">
+        <div class="grid-layout">
+          <div class="column column-1" data-speed="1.1">
+            <div class="column-content">
+              <div class="grid-image">
+                <img src="../ScrollSmoother/bau.webp" alt="BAU">
+              </div>
+              <div class="grid-image">
+                <img src="../ScrollSmoother/bilgi.webp" alt="Bilgi">
+              </div>
+              <div class="grid-image">
+                <img src="../ScrollSmoother/iau.webp" alt="IAU">
+              </div>
+            </div>
+          </div>
+          <div class="column column-2" data-speed="1.01">
+            <div class="column-content">
+              <div class="grid-image">
+                <img src="../ScrollSmoother/kent.webp" alt="Kent">
+              </div>
+              <div class="grid-image">
+                <img src="../ScrollSmoother/medipol.webp" alt="Medipol">
+              </div>
+              <div class="grid-image">
+                <img src="../ScrollSmoother/bau.webp" alt="BAU">
+              </div>
+            </div>
+          </div>
+          <div class="column column-3" data-speed="1.1">
+            <div class="column-content">
+              <div class="grid-image">
+                <img src="../ScrollSmoother/bilgi.webp" alt="Bilgi">
+              </div>
+              <div class="grid-image">
+                <img src="../ScrollSmoother/iau.webp" alt="IAU">
+              </div>
+              <div class="grid-image">
+                <img src="../ScrollSmoother/kent.webp" alt="Kent">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="spacer"></div>
+
+      <section class="parallax-section">
+        <img class="parallax-image" src="../ScrollSmoother/medipol.webp" data-speed="auto" alt="Medipol">
+      </section>
+      </div>
+
+      <section class="page-after-scroll" id="about">
+        <div class="after-title-container">
+          <h2 class="after-title text">Créé parce que le bureau d’ikamet ne prend pas sans rendez-vous le vendredi</h2>
+          <div class="bac-cta">
+            <button type="button" class="bac-button">Envoyer mes résultats du bac</button>
+            <img class="bac-click-icon" src="../brand/click.png" alt="">
+          </div>
+          <div class="after-body">
+            <div class="after-col">
+              <p class="after-body-text">LUMAR a commencé avec un étudiant marocain à Bahçeşehir University, diplômé avec distinction. Puis le chaos : mauvais scans de documents, une banque qui voulait un numéro d’étudiant avant que l’inscription soit définitive, un propriétaire exigeant un contrat en turc que personne dans la famille ne pouvait lire.</p>
+              <div class="after-image-wrap">
+                <img class="after-image" src="../ScrollSmoother/bau.webp" alt="Bahçeşehir University">
+              </div>
+            </div>
+            <div class="after-col">
+              <p class="after-body-text">Quelques-uns d’entre nous, déjà étudiants à Istanbul et anciens de retour au Maroc, avons commencé à répondre aux WhatsApp des cousins. C’est encore l’essentiel de ce qu’on fait. On ne prend pas toutes les filières. Si vos notes ne passent pas le seuil de médecine à Medipol, on vous le dira avant que vous payiez qui que ce soit.</p>
+              <div class="after-image-wrap">
+                <img class="after-image" src="../ScrollSmoother/medipol.webp" alt="Medipol University">
+              </div>
+            </div>
+          </div>
+
+          <div class="after-facts">
+            <div class="after-fact">
+              <h3 class="after-fact-label">Délai de réponse habituel</h3>
+              <p class="after-fact-value">Le jour même sur WhatsApp (en semaine)</p>
+            </div>
+            <div class="after-fact">
+              <h3 class="after-fact-label">Dossier déposé</h3>
+              <p class="after-fact-value">Sous 3 jours ouvrés une fois les documents complets</p>
+            </div>
+            <div class="after-fact">
+              <h3 class="after-fact-label">Ce que nous ne ferons pas</h3>
+              <p class="after-fact-value">Promettre un résultat de visa que nous ne contrôlons pas. Nous gérons le côté université et les démarches après l’acceptation.</p>
+            </div>
+            <div class="after-fact">
+              <h3 class="after-fact-label">Basés à</h3>
+              <p class="after-fact-value">Maroc et Istanbul. Nous accueillons les étudiants à Sabiha Gökçen à leur arrivée.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="text-marquee" aria-label="Bienvenue chez Lumar">
+          <div class="text-marquee-track">
+            <div class="text-marquee-group">
+              <span class="text-marquee-item">Bienvenue chez Lumar</span>
+              <span class="text-marquee-item">Bienvenue chez Lumar</span>
+              <span class="text-marquee-item">Bienvenue chez Lumar</span>
+              <span class="text-marquee-item">Bienvenue chez Lumar</span>
+            </div>
+            <div class="text-marquee-group" aria-hidden="true">
+              <span class="text-marquee-item">Bienvenue chez Lumar</span>
+              <span class="text-marquee-item">Bienvenue chez Lumar</span>
+              <span class="text-marquee-item">Bienvenue chez Lumar</span>
+              <span class="text-marquee-item">Bienvenue chez Lumar</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="programs-section" id="programs">
+        <div class="programs-inner">
+          <p class="programs-label">Programmes</p>
+          <h2 class="programs-title">Les filières où nous plaçons vraiment des étudiants</h2>
+          <div class="programs-grid">
+            <article class="program-card">
+              <div class="program-image-wrap">
+                <img class="program-image" src="../ScrollSmoother/medipol.webp" alt="Programmes de médecine et santé">
+              </div>
+              <h3 class="program-card-title">Médecine &amp; santé</h3>
+              <p class="program-card-text">Médecine humaine, médecine générale, dentaire, infirmier, kiné, surtout à Aydın, Medipol, Kent.</p>
+            </article>
+            <article class="program-card">
+              <div class="program-image-wrap">
+                <img class="program-image" src="../ScrollSmoother/bau.webp" alt="Programmes d’ingénierie et IT">
+              </div>
+              <h3 class="program-card-title">Ingénierie &amp; IT</h3>
+              <p class="program-card-text">Logiciel, IA, cybersécurité à BAU et Bilgi ; les labs sont en anglais.</p>
+            </article>
+            <article class="program-card">
+              <div class="program-image-wrap">
+                <img class="program-image" src="../ScrollSmoother/bilgi.webp" alt="Programmes de business et droit">
+              </div>
+              <h3 class="program-card-title">Business &amp; droit</h3>
+              <p class="program-card-text">Business international, logistique, droit (Bilgi), administration publique.</p>
+            </article>
+            <article class="program-card">
+              <div class="program-image-wrap">
+                <img class="program-image" src="../ScrollSmoother/kent.webp" alt="Programmes de design et médias">
+              </div>
+              <h3 class="program-card-title">Design &amp; médias</h3>
+              <p class="program-card-text">Mode, cinéma, game design. Promotions plus petites ; portfolio parfois exigé.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="uni-stack" id="universities" aria-label="Universités">
+        <ul class="uni-stack__cards">
+          <li class="uni-stack__card">
+            <div class="uni-stack__content">
+              <img class="uni-stack__image" src="../ScrollSmoother/bau.webp" alt="Bahçeşehir University" decoding="async">
+              <div class="uni-stack__overlay">
+                <span class="uni-stack__number">01</span>
+                <h3 class="uni-stack__title">Bahçeşehir</h3>
+              </div>
+            </div>
+          </li>
+          <li class="uni-stack__card">
+            <div class="uni-stack__content">
+              <img class="uni-stack__image" src="../ScrollSmoother/bilgi.webp" alt="Bilgi University" decoding="async">
+              <div class="uni-stack__overlay">
+                <span class="uni-stack__number">02</span>
+                <h3 class="uni-stack__title">Bilgi</h3>
+              </div>
+            </div>
+          </li>
+          <li class="uni-stack__card">
+            <div class="uni-stack__content">
+              <img class="uni-stack__image" src="../ScrollSmoother/medipol.webp" alt="Medipol University" decoding="async">
+              <div class="uni-stack__overlay">
+                <span class="uni-stack__number">03</span>
+                <h3 class="uni-stack__title">Medipol</h3>
+              </div>
+            </div>
+          </li>
+          <li class="uni-stack__card">
+            <div class="uni-stack__content">
+              <img class="uni-stack__image" src="../ScrollSmoother/kent.webp" alt="Kent University" decoding="async">
+              <div class="uni-stack__overlay">
+                <span class="uni-stack__number">04</span>
+                <h3 class="uni-stack__title">Kent</h3>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </section>
+
+      <section class="pricing-section" id="packages" aria-label="Formules">
+        <div class="pricing-inner">
+          <p class="pricing-label">Formules</p>
+          <h2 class="pricing-title">Choisissez le niveau d’accompagnement qui vous convient</h2>
+
+          <div class="pricing-slider" data-pricing-slider>
+            <button type="button" class="pricing-nav pricing-nav--prev" aria-label="Formule précédente">
+              <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z" fill="currentColor"/></svg>
+            </button>
+
+            <div class="pricing-viewport">
+              <div class="pricing-track">
+                <article class="pricing-card" data-plan="free">
+                  <h3 class="pricing-card__tier">Gratuit</h3>
+                  <p class="pricing-card__price">0 <span class="pricing-card__currency">MAD</span></p>
+                  <ul class="pricing-card__features">
+                    <li>Appel d’orientation + conseil sur la filière</li>
+                    <li>Dossier déposé sous 3 jours ouvrés</li>
+                  </ul>
+                  <a class="pricing-card__cta" href="#contact">Commencer</a>
+                </article>
+
+                <article class="pricing-card pricing-card--popular is-active" data-plan="standard">
+                  <span class="pricing-card__badge">Populaire</span>
+                  <h3 class="pricing-card__tier">Standard</h3>
+                  <p class="pricing-card__price"><span class="pricing-card__from">à partir de</span> 4,500 <span class="pricing-card__currency">MAD</span></p>
+                  <ul class="pricing-card__features">
+                    <li>Appel d’orientation + conseil sur la filière</li>
+                    <li>Dossier déposé sous 3 jours ouvrés</li>
+                    <li>Inscription définitive à l’université</li>
+                    <li>Compte bancaire étudiant (Ziraat / Vakıf)</li>
+                  </ul>
+                  <a class="pricing-card__cta pricing-card__cta--primary" href="#contact">Choisir Standard</a>
+                </article>
+
+                <article class="pricing-card" data-plan="vip">
+                  <h3 class="pricing-card__tier">VIP</h3>
+                  <p class="pricing-card__price"><span class="pricing-card__from">à partir de</span> 9,500 <span class="pricing-card__currency">MAD</span></p>
+                  <ul class="pricing-card__features">
+                    <li>Appel d’orientation + conseil sur la filière</li>
+                    <li>Dossier déposé sous 3 jours ouvrés</li>
+                    <li>Inscription définitive à l’université</li>
+                    <li>Compte bancaire étudiant (Ziraat / Vakıf)</li>
+                    <li>Accueil à l’aéroport + prise de rendez-vous ikamet</li>
+                    <li>3 mois de logement (charges comprises)</li>
+                    <li>SIM, projet de bail, dossiers d’assurance santé</li>
+                  </ul>
+                  <a class="pricing-card__cta" href="#contact">Choisir VIP</a>
+                </article>
+              </div>
+            </div>
+
+            <button type="button" class="pricing-nav pricing-nav--next" aria-label="Formule suivante">
+              <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.59 16.59 10 18l6-6-6-6-1.41 1.41L13.17 12z" fill="currentColor"/></svg>
+            </button>
+          </div>
+
+          <div class="pricing-dots" role="tablist" aria-label="Formules">
+            <button type="button" class="pricing-dot" data-index="0" aria-label="Formule Gratuit"></button>
+            <button type="button" class="pricing-dot is-active" data-index="1" aria-label="Formule Standard" aria-current="true"></button>
+            <button type="button" class="pricing-dot" data-index="2" aria-label="Formule VIP"></button>
+          </div>
+        </div>
+      </section>
+
+      <section class="contact-section" id="contact" aria-label="Contact">
+        <div class="contact-inner">
+          <p class="contact-label">Contact</p>
+          <h2 class="contact-title">Dites-nous où vous en êtes. On cartographie les options</h2>
+
+          <form class="contact-form" id="lead-form" novalidate>
+            <div class="contact-field">
+              <label class="contact-field__label" for="lead-name">Nom complet</label>
+              <input
+                class="contact-field__input"
+                id="lead-name"
+                name="name"
+                type="text"
+                autocomplete="name"
+                placeholder="Votre nom complet"
+                required
+              >
+            </div>
+
+            <div class="contact-field">
+              <label class="contact-field__label" for="lead-whatsapp">Numéro WhatsApp</label>
+              <input
+                class="contact-field__input"
+                id="lead-whatsapp"
+                name="whatsapp"
+                type="tel"
+                autocomplete="tel"
+                inputmode="tel"
+                placeholder="+212 6XX XXX XXX"
+                required
+              >
+              <p class="contact-field__hint">Incluez l’indicatif pays (idéal pour les candidats marocains).</p>
+            </div>
+
+            <div class="contact-field">
+              <label class="contact-field__label" for="lead-major">Filière souhaitée</label>
+              <input
+                class="contact-field__input"
+                id="lead-major"
+                name="major"
+                type="text"
+                placeholder="ex. Médecine, Ingénierie, Management"
+                required
+              >
+            </div>
+
+            <fieldset class="contact-field contact-field--language">
+              <legend class="contact-field__label">Langue d’études préférée</legend>
+              <div class="contact-language">
+                <label class="contact-language__option">
+                  <input type="radio" name="language" value="English" required>
+                  <span class="contact-language__card">Anglais</span>
+                </label>
+                <label class="contact-language__option">
+                  <input type="radio" name="language" value="Turkish">
+                  <span class="contact-language__card">Turc</span>
+                </label>
+              </div>
+            </fieldset>
+
+            <div class="contact-field">
+              <label class="contact-field__label" for="lead-gpa">Moyenne du bac / GPA</label>
+              <input
+                class="contact-field__input"
+                id="lead-gpa"
+                name="gpa"
+                type="text"
+                placeholder="ex. 15/20 ou 3.5/4.0"
+                required
+              >
+              <p class="contact-field__hint">Nous aide à évaluer vos options d’admission.</p>
+            </div>
+
+            <div class="contact-field">
+              <label class="contact-field__label" for="lead-budget">Budget annuel approximatif</label>
+              <div class="contact-select-wrap">
+                <select class="contact-field__input contact-field__select" id="lead-budget" name="budget" required>
+                  <option value="" disabled selected>Sélectionnez une fourchette</option>
+                  <option value="Under 40,000 MAD / year">Moins de 40 000 MAD / an</option>
+                  <option value="40,000 – 70,000 MAD / year">40 000 – 70 000 MAD / an</option>
+                  <option value="70,000 – 100,000 MAD / year">70 000 – 100 000 MAD / an</option>
+                  <option value="100,000+ MAD / year">100 000+ MAD / an</option>
+                </select>
+              </div>
+              <p class="contact-field__hint">Pour recommander une université adaptée à votre budget.</p>
+            </div>
+
+            <button class="contact-submit" type="submit">Recevoir mes options sur WhatsApp</button>
+          </form>
+        </div>
+      </section>
+
+      <section class="faq-section" id="faq" aria-label="FAQ">
+        <div class="faq-inner">
+          <p class="faq-label">FAQ</p>
+          <h2 class="faq-title">Questions qu’on nous pose avant l’envoi des documents</h2>
+
+          <div class="faq-list" data-faq-accordion>
+            <details class="faq-item">
+              <summary class="faq-question">Garantissez-vous un visa ?</summary>
+              <div class="faq-answer">
+                <p>Non. Nous gérons le côté université et les démarches après l’acceptation. Le visa est décidé par le consulat. Nous ne promettons pas ce que nous ne contrôlons pas.</p>
+              </div>
+            </details>
+
+            <details class="faq-item">
+              <summary class="faq-question">À quelle vitesse répondez-vous ?</summary>
+              <div class="faq-answer">
+                <p>Le jour même sur WhatsApp en semaine.</p>
+              </div>
+            </details>
+
+            <details class="faq-item">
+              <summary class="faq-question">Quand le dossier est-il déposé ?</summary>
+              <div class="faq-answer">
+                <p>Sous 3 jours ouvrés une fois vos documents complets.</p>
+              </div>
+            </details>
+
+            <details class="faq-item">
+              <summary class="faq-question">Et si mes notes ne passent pas les seuils de médecine ?</summary>
+              <div class="faq-answer">
+                <p>On vous le dira avant que vous payiez qui que ce soit. Nous ne prenons pas toutes les filières. Si la médecine à Medipol n’est pas réaliste pour vos notes, vous le saurez d’abord.</p>
+              </div>
+            </details>
+
+            <details class="faq-item">
+              <summary class="faq-question">Programmes en anglais ou en turc ?</summary>
+              <div class="faq-answer">
+                <p>Les deux existent selon la faculté. Nous faisons correspondre la langue à votre profil, vos résultats du bac et votre budget, y compris les labs en anglais quand c’est pertinent.</p>
+              </div>
+            </details>
+
+            <details class="faq-item">
+              <summary class="faq-question">Quelle est la différence entre Gratuit, Standard et VIP ?</summary>
+              <div class="faq-answer">
+                <p>Gratuit couvre l’orientation et le dépôt. Standard ajoute l’inscription définitive et l’aide au compte bancaire étudiant. VIP ajoute l’accueil à l’aéroport, le rendez-vous ikamet, le logement les premiers mois, et les démarches d’arrivée (SIM, projet de bail, assurance).</p>
+              </div>
+            </details>
+          </div>
+        </div>
+      </section>
+
+      <footer class="site-footer">
+        <img class="site-footer__logo" src="../brand/logo-footer.png" alt="LUMAR">
+        <p class="site-footer__tagline">Maroc et Istanbul</p>
+        <p class="site-footer__copy">&copy; 2026 LUMAR</p>
+        <div class="site-footer__wordmark" aria-hidden="true">
+          <span class="site-footer__wordmark-text">LUMAR</span>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollSmoother.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js"></script>
+  <script src="../main.js"></script>
+</body>
+</html>

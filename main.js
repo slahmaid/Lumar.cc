@@ -20,7 +20,7 @@
   const siteHeader = document.querySelector(".site-header");
   const heroTitle = document.querySelector(".logo-section .hero-title");
   const marqueeTrack = document.querySelector(".text-marquee-track");
-  // Prefer coarse pointer over maxTouchPoints — Windows laptops often report
+  // Prefer coarse pointer over maxTouchPoints. Windows laptops often report
   // touch points even when used with a mouse, which was muting animations.
   const isCoarsePointer =
     typeof window !== "undefined" &&
@@ -111,7 +111,7 @@
     });
   }
 
-  // Pricing packages carousel — starts on STANDARD (index 1)
+  // Pricing packages carousel. Starts on STANDARD (index 1)
   (function initPricingSlider() {
     const root = document.querySelector("[data-pricing-slider]");
     if (!root) return;
@@ -277,24 +277,51 @@
       const gpa = String(data.get("gpa") || "").trim();
       const budget = String(data.get("budget") || "").trim();
 
-      const message = [
-        "Hello LUMAR — I'd like my university options.",
-        "",
-        `Name: ${name}`,
-        `WhatsApp: ${whatsapp}`,
-        `Desired major: ${major}`,
-        `Study language: ${language}`,
-        `High school GPA: ${gpa}`,
-        `Yearly budget: ${budget}`,
-      ].join("\n");
+      const lang = document.documentElement.lang;
+      const messageByLang = {
+        fr: [
+          "Bonjour LUMAR, je souhaite recevoir mes options universitaires.",
+          "",
+          `Nom : ${name}`,
+          `WhatsApp : ${whatsapp}`,
+          `Filière souhaitée : ${major}`,
+          `Langue d'études : ${language}`,
+          `Moyenne / GPA : ${gpa}`,
+          `Budget annuel : ${budget}`,
+        ],
+        ar: [
+          "مرحبًا LUMAR، أرغب في خياراتي الجامعية.",
+          "",
+          `الاسم: ${name}`,
+          `واتساب: ${whatsapp}`,
+          `التخصص المرغوب: ${major}`,
+          `لغة الدراسة: ${language}`,
+          `المعدل: ${gpa}`,
+          `الميزانية السنوية: ${budget}`,
+        ],
+        en: [
+          "Hello LUMAR, I'd like my university options.",
+          "",
+          `Name: ${name}`,
+          `WhatsApp: ${whatsapp}`,
+          `Desired major: ${major}`,
+          `Study language: ${language}`,
+          `High school GPA: ${gpa}`,
+          `Yearly budget: ${budget}`,
+        ],
+      };
+      const message = (messageByLang[lang] || messageByLang.en).join("\n");
 
       if (!WHATSAPP_NUMBER || WHATSAPP_NUMBER === "YOUR_NUMBER") {
         console.warn(
           "Set WHATSAPP_NUMBER in main.js (digits only, e.g. 2126xxxxxxx)."
         );
-        window.alert(
-          "WhatsApp number not configured yet. Replace YOUR_NUMBER in main.js."
-        );
+        const alertByLang = {
+          fr: "Numéro WhatsApp pas encore configuré. Remplacez YOUR_NUMBER dans main.js.",
+          ar: "رقم واتساب غير مُعدّ بعد. استبدل YOUR_NUMBER في main.js.",
+          en: "WhatsApp number not configured yet. Replace YOUR_NUMBER in main.js.",
+        };
+        window.alert(alertByLang[lang] || alertByLang.en);
         return;
       }
 
@@ -307,18 +334,92 @@
     });
   })();
 
-  // FAQ accordion — one open item at a time
+  // FAQ accordion: one open item at a time, slow height animation
   (function initFaqAccordion() {
     const root = document.querySelector("[data-faq-accordion]");
     if (!root) return;
 
     const items = Array.from(root.querySelectorAll(".faq-item"));
+    if (!items.length) return;
+
+    const reduceMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+    const duration = reduceMotion ? 0.01 : 0.7;
+    const ease = "power2.inOut";
+
+    function getAnswer(item) {
+      return item.querySelector(".faq-answer");
+    }
+
+    function closeItem(item) {
+      const answer = getAnswer(item);
+      if (!answer) return;
+
+      gsap.killTweensOf(answer);
+      item.classList.remove("is-open");
+
+      gsap.to(answer, {
+        height: 0,
+        paddingBottom: 0,
+        opacity: 0,
+        duration,
+        ease,
+        onComplete: () => {
+          item.open = false;
+        },
+      });
+    }
+
+    function openItem(item) {
+      const answer = getAnswer(item);
+      if (!answer) return;
+
+      gsap.killTweensOf(answer);
+      item.open = true;
+      item.classList.add("is-open");
+
+      gsap.fromTo(
+        answer,
+        { height: 0, paddingBottom: 0, opacity: 0 },
+        {
+          height: "auto",
+          paddingBottom: "1.35rem",
+          opacity: 1,
+          duration,
+          ease,
+        }
+      );
+    }
+
     items.forEach((item) => {
-      item.addEventListener("toggle", () => {
-        if (!item.open) return;
+      const summary = item.querySelector(".faq-question");
+      const answer = getAnswer(item);
+      if (!summary || !answer) return;
+
+      gsap.set(answer, {
+        height: item.open ? "auto" : 0,
+        paddingBottom: item.open ? "1.35rem" : 0,
+        opacity: item.open ? 1 : 0,
+        overflow: "hidden",
+      });
+      if (item.open) item.classList.add("is-open");
+
+      summary.addEventListener("click", (event) => {
+        event.preventDefault();
+
+        const isOpen = item.classList.contains("is-open");
+        if (isOpen) {
+          closeItem(item);
+          return;
+        }
+
         items.forEach((other) => {
-          if (other !== item) other.open = false;
+          if (other !== item && other.classList.contains("is-open")) {
+            closeItem(other);
+          }
         });
+        openItem(item);
       });
     });
   })();
@@ -439,7 +540,7 @@
         });
       }
 
-      // Hero word disperse — same animation as original preview on all viewports
+      // Hero word disperse (same animation as original preview on all viewports)
       if (heroTitle) {
         const originalHero =
           heroTitle.dataset.originalText || heroTitle.textContent.trim();

@@ -185,6 +185,48 @@ body {
   transform: scaleX(1);
 }
 
+.site-menu-lang {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  row-gap: 0.35rem;
+  margin-top: 0.5rem;
+  max-width: min(90vw, 28rem);
+  /* Keep EN / FR / AR order stable on RTL pages */
+  direction: ltr;
+}
+
+.site-menu-lang-sep {
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 2.5vw, 1.35rem);
+  font-weight: 500;
+  color: #0c1e36;
+  opacity: 0.35;
+}
+
+.site-menu-link--lang {
+  font-size: clamp(1rem, 2.5vw, 1.35rem);
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+.site-menu-link--lang[aria-current="page"] {
+  opacity: 1;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.site-menu-link--lang[aria-current="page"]::after {
+  display: none;
+}
+
+.site-menu-link--lang[lang="ar"] {
+  font-family: "Cairo", "Segoe UI", Tahoma, sans-serif;
+  letter-spacing: 0;
+}
+
 body.menu-open {
   overflow: hidden;
 }
@@ -1514,15 +1556,17 @@ body.menu-open {
   border-right: 2px solid #0c1e36;
   border-bottom: 2px solid #0c1e36;
   transform: translateY(-65%) rotate(45deg);
-  transition: transform 0.25s ease;
+  transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.faq-item[open] .faq-question::after {
+.faq-item[open] .faq-question::after,
+.faq-item.is-open .faq-question::after {
   transform: translateY(-35%) rotate(225deg);
 }
 
 .faq-answer {
-  padding: 0 0 1.35rem;
+  padding: 0;
+  overflow: hidden;
 }
 
 .faq-answer p {
@@ -1533,6 +1577,12 @@ body.menu-open {
   font-weight: 400;
   line-height: 1.65;
   color: #0c1e36;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .faq-question::after {
+    transition-duration: 0.01ms;
+  }
 }
 
 @media (min-width: 900px) {
@@ -1627,4 +1677,315 @@ body.menu-open {
     margin-top: 2rem;
     font-size: clamp(4.5rem, 32vw, 10rem);
   }
+}
+
+/* —— Arabic RTL: Cairo (display) + Tajawal (body), relaxed line spacing —— */
+html[dir="rtl"] {
+  --font-display: "Cairo", "Segoe UI", Tahoma, sans-serif;
+  --font-body: "Tajawal", "Segoe UI", Tahoma, sans-serif;
+}
+
+html[dir="rtl"] body {
+  font-size: 1.1875rem;
+  line-height: 1.85;
+  letter-spacing: 0;
+}
+
+html[dir="rtl"] .hamburger {
+  right: auto;
+  left: 1.5rem;
+}
+
+@media (max-width: 600px) {
+  html[dir="rtl"] .hamburger {
+    left: 1rem;
+    right: auto;
+  }
+}
+
+html[dir="rtl"] .site-menu-link {
+  letter-spacing: 0;
+  line-height: 1.45;
+}
+
+html[dir="rtl"] .site-menu-link::after {
+  left: auto;
+  right: 0;
+  transform-origin: right center;
+}
+
+html[dir="rtl"] .site-menu-link--lang {
+  letter-spacing: 0;
+  line-height: 1.5;
+}
+
+html[dir="rtl"] .site-menu-lang {
+  flex-wrap: wrap;
+  row-gap: 0.35rem;
+}
+
+html[dir="rtl"] .hero-title {
+  max-width: 16em;
+  line-height: 1.45;
+  letter-spacing: 0;
+  font-weight: 700;
+}
+
+html[dir="rtl"] .cssbuttons-io-button {
+  padding-left: 3.3em;
+  padding-right: 1.2em;
+  letter-spacing: 0;
+  font-weight: 600;
+}
+
+html[dir="rtl"] .cssbuttons-io-button .icon {
+  right: auto;
+  left: 0.3em;
+  margin-left: 0;
+  margin-right: 1em;
+}
+
+html[dir="rtl"] .cssbuttons-io-button .icon svg {
+  transform: scaleX(-1);
+}
+
+html[dir="rtl"] .cssbuttons-io-button:hover .icon svg {
+  transform: scaleX(-1) translateX(0.1em);
+}
+
+html[dir="rtl"] .after-title {
+  max-width: 22em;
+  line-height: 1.5;
+  letter-spacing: 0;
+  font-weight: 700;
+}
+
+html[dir="rtl"] .bac-button {
+  letter-spacing: 0;
+  text-transform: none;
+  line-height: 1.6;
+  font-weight: 700;
+}
+
+html[dir="rtl"] .bac-button::before {
+  margin-right: 0;
+  margin-left: 10px;
+}
+
+html[dir="rtl"] .bac-click-icon {
+  right: auto;
+  left: 0.15rem;
+}
+
+html[dir="rtl"] .after-body-text {
+  line-height: 1.9;
+  letter-spacing: 0;
+}
+
+html[dir="rtl"] .after-fact-label {
+  letter-spacing: 0;
+  text-transform: none;
+  line-height: 1.55;
+  font-weight: 700;
+}
+
+html[dir="rtl"] .after-fact-value {
+  line-height: 1.75;
+  letter-spacing: 0;
+}
+
+@media (min-width: 900px) {
+  html[dir="rtl"] .after-fact {
+    text-align: right;
+  }
+}
+
+/* Marquee + pricing keep LTR layout so GSAP/scroll math stay correct */
+html[dir="rtl"] .text-marquee {
+  direction: ltr;
+}
+
+html[dir="rtl"] .text-marquee-item {
+  direction: rtl;
+  unicode-bidi: embed;
+  letter-spacing: 0;
+  text-transform: none;
+  line-height: 1.5;
+  font-weight: 700;
+}
+
+html[dir="rtl"] .programs-label,
+html[dir="rtl"] .pricing-label,
+html[dir="rtl"] .contact-label,
+html[dir="rtl"] .faq-label {
+  letter-spacing: 0;
+  text-transform: none;
+  line-height: 1.55;
+  font-weight: 700;
+}
+
+html[dir="rtl"] .programs-title,
+html[dir="rtl"] .pricing-title,
+html[dir="rtl"] .contact-title,
+html[dir="rtl"] .faq-title {
+  max-width: 18em;
+  line-height: 1.45;
+  letter-spacing: 0;
+  font-weight: 700;
+}
+
+html[dir="rtl"] .program-card-title {
+  line-height: 1.4;
+  letter-spacing: 0;
+  font-weight: 700;
+}
+
+html[dir="rtl"] .program-card-text {
+  line-height: 1.8;
+  letter-spacing: 0;
+}
+
+html[dir="rtl"] .pricing-slider {
+  direction: ltr;
+}
+
+html[dir="rtl"] .pricing-card {
+  direction: rtl;
+  text-align: right;
+}
+
+html[dir="rtl"] .pricing-card__badge {
+  right: auto;
+  left: 1rem;
+  letter-spacing: 0;
+  text-transform: none;
+  font-weight: 700;
+}
+
+html[dir="rtl"] .pricing-card__tier {
+  letter-spacing: 0;
+  text-transform: none;
+  line-height: 1.35;
+  font-weight: 700;
+}
+
+html[dir="rtl"] .pricing-card__price {
+  letter-spacing: 0;
+  line-height: 1.25;
+}
+
+html[dir="rtl"] .pricing-card__from {
+  margin-right: 0;
+  margin-left: 0.2em;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+html[dir="rtl"] .pricing-card__currency {
+  letter-spacing: 0;
+}
+
+html[dir="rtl"] .pricing-card__features li {
+  padding-left: 0;
+  padding-right: 1.35rem;
+  line-height: 1.7;
+  letter-spacing: 0;
+}
+
+html[dir="rtl"] .pricing-card__features li::before {
+  left: auto;
+  right: 0;
+}
+
+html[dir="rtl"] .pricing-card__cta {
+  letter-spacing: 0;
+  text-transform: none;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+html[dir="rtl"] .pricing-nav--prev {
+  margin-left: 0.25rem;
+  margin-right: 0;
+}
+
+html[dir="rtl"] .pricing-nav--next {
+  margin-right: 0.25rem;
+  margin-left: 0;
+}
+
+html[dir="rtl"] .contact-field__label {
+  letter-spacing: 0;
+  text-transform: none;
+  line-height: 1.55;
+  font-weight: 700;
+}
+
+html[dir="rtl"] .contact-field__input {
+  line-height: 1.6;
+  letter-spacing: 0;
+  text-align: right;
+}
+
+html[dir="rtl"] .contact-field__input[dir="ltr"] {
+  text-align: left;
+  direction: ltr;
+}
+
+html[dir="rtl"] .contact-field__hint {
+  line-height: 1.65;
+  letter-spacing: 0;
+}
+
+html[dir="rtl"] .contact-select-wrap::after {
+  right: auto;
+  left: 1rem;
+}
+
+html[dir="rtl"] .contact-field__select {
+  padding-right: 1rem;
+  padding-left: 2.5rem;
+}
+
+html[dir="rtl"] .contact-language__card {
+  letter-spacing: 0;
+  text-transform: none;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+html[dir="rtl"] .contact-submit {
+  letter-spacing: 0;
+  text-transform: none;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+html[dir="rtl"] .faq-question {
+  padding: 1.25rem 0 1.25rem 2.25rem;
+  letter-spacing: 0;
+  line-height: 1.55;
+  font-weight: 700;
+}
+
+html[dir="rtl"] .faq-question::after {
+  right: auto;
+  left: 0;
+}
+
+html[dir="rtl"] .faq-answer p {
+  max-width: 42em;
+  line-height: 1.9;
+  letter-spacing: 0;
+}
+
+html[dir="rtl"] .site-footer__tagline {
+  letter-spacing: 0;
+  text-transform: none;
+  line-height: 1.6;
+}
+
+html[dir="rtl"] .site-footer__copy {
+  letter-spacing: 0;
+  line-height: 1.5;
 }
